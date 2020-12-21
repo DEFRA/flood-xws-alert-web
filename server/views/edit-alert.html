@@ -1,0 +1,67 @@
+{% extends "form.html" %}
+
+{% set formSubmitButtonText = "Save" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ assetPath }}/vendor/autocomplete/accessible-autocomplete.min.css">
+{% endblock %}
+
+{% block beforeForm %}
+  <h1 class="govuk-heading-l">Edit alert</h1>
+{% endblock %}
+
+{% block form %}
+  <input type="hidden" name="templateRef" value="{{data.templateRef}}" />
+  {{
+    govukSelect({
+      id: "areaCode",
+      name: "areaCode",
+      label: {
+        text: "Area"
+      },
+      value: data.areaCode,
+      errorMessage: errors.areaCode,
+      items: data.items
+    }) 
+  }}
+  {{
+    govukCharacterCount({
+      id: "headline",
+      name: "headline",
+      label: {
+        text: "Headline"
+      },
+      rows: 2,
+      maxlength: MAX_MESSAGE_HEADLINE_LENGTH,
+      value: data.headline,
+      errorMessage: errors.headline
+    }) 
+  }}
+  {{
+    govukCharacterCount({
+      id: "body",
+      name: "body",
+      label: {
+        text: "Body"
+      },
+      rows: 12,
+      maxlength: MAX_MESSAGE_BODY_LENGTH,
+      value: data.body,
+      errorMessage: errors.body
+    }) 
+  }}
+
+  <script type="text/javascript" src="{{ assetPath }}/vendor/autocomplete/accessible-autocomplete.min.js"></script>
+  <script type="text/javascript">
+    var selectEl = document.querySelector('#areaCode')
+
+    accessibleAutocomplete.enhanceSelectElement({
+      autoselect: true,
+      confirmOnBlur: false,
+      defaultValue: '',
+      minLength: 3,
+      displayMenu: 'overlay',
+      selectElement: selectEl
+    })
+  </script>
+{% endblock %}

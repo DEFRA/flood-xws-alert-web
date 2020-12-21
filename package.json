@@ -1,0 +1,53 @@
+{
+  "name": "alert-web",
+  "version": "0.0.1",
+  "description": "XWS Alert System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build:css": "bin/build-css",
+    "build": "bin/build",
+    "lint": "standard",
+    "unit-test": "lab -c -r console -o stdout -r lcov -o lcov.info",
+    "test": "npm run lint && npm run unit-test",
+    "deploy:sandbox": "cf login -a api.london.cloud.service.gov.uk -o ea-defra-next-warning-system -s sandbox && cf push defra-next-warning-system-alert-web-sandbox",
+    "deploy:test": "cf login -a api.london.cloud.service.gov.uk -o ea-defra-next-warning-system -s test && cf push defra-next-warning-system-alert-web-test",
+    "deploy:production": "cf login -a api.london.cloud.service.gov.uk -o ea-defra-next-warning-system -s production && cf push defra-next-warning-system-alert-web-production"
+  },
+  "author": "defra",
+  "license": "OGL",
+  "engines": {
+    "node": "12"
+  },
+  "dependencies": {
+    "@hapi/bell": "12.1.1",
+    "@hapi/boom": "9.1.1",
+    "@hapi/cookie": "11.0.2",
+    "@hapi/hapi": "20.0.3",
+    "@hapi/hoek": "9.1.0",
+    "@hapi/inert": "6.0.3",
+    "@hapi/vision": "6.0.1",
+    "blipp": "4.0.2",
+    "common": "github:NeXt-Warning-System/common",
+    "dayjs": "1.9.7",
+    "dotenv": "^8.2.0",
+    "govuk-frontend": "3.10.1",
+    "hapi-pino": "8.3.0",
+    "joi": "17.3.0",
+    "nunjucks": "3.2.2",
+    "pg": "8.5.1"
+  },
+  "devDependencies": {
+    "@hapi/code": "8.0.2",
+    "@hapi/lab": "24.1.0",
+    "codeclimate-test-reporter": "0.5.1",
+    "node-sass": "5.0.0",
+    "standard": "16.0.3"
+  },
+  "standard": {
+    "ignore": [
+      "/server/public/static/vendor",
+      "/server/public/static/js/map.js"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <span class="govuk-caption-l">{{data.area.region}}</span>
+  <h1 class="govuk-heading-l">{{data.area.name}} ({{data.area.code}})</h1>
+  <p class="govuk-body-l">{{data.area.description}}</p>
+
+  <h3 class="govuk-heading-s">Alerts ready for approval</h3>
+  {% if data.draftAreaRows.length %}
+    {{
+      govukTable({
+        classes: "govuk-!-margin-bottom-9 govuk-!-font-size-16",
+        head: [
+          { text: "Headline" },
+          { text: "Body" },
+          { text: "Updated" },
+          { text: "" }
+        ],
+        rows: data.draftAreaRows
+      })
+    }}
+  {% else %}
+    <p class="govuk-body">There are no alerts ready for approval</p>
+  {% endif %}
+
+  <h3 class="govuk-heading-s">Live alerts</h3>
+  {% if data.liveAreaRows.length %}
+    {{
+      govukTable({
+        classes: "govuk-!-font-size-16",
+        head: [
+          { text: "Headline" },
+          { text: "Body" },
+          { text: "Approved" },
+          { text: "" }
+        ],
+        rows: data.liveAreaRows
+      })
+    }}
+  {% else %}
+    <p class="govuk-body">There are no live alerts</p>
+  {% endif %}
+ 
+  <h3 class="govuk-heading-s">Historic alerts</h3>
+  {% if data.historicAreaRows.length %}
+    {{
+      govukTable({
+        classes: "govuk-!-font-size-16",
+        head: [
+          { text: "Headline" },
+          { text: "Body" },
+          { text: "Approved" },
+          { text: "" }
+        ],
+        rows: data.historicAreaRows
+      })
+    }}
+  {% else %}
+    <p class="govuk-body">There are no historic alerts</p>
+  {% endif %}
+{% endblock %}

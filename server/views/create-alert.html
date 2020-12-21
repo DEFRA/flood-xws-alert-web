@@ -1,0 +1,94 @@
+{% extends "form.html" %}
+
+{% set formSubmitButtonText = "Send for approval" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ assetPath }}/vendor/autocomplete/accessible-autocomplete.min.css">
+  <link rel="stylesheet" href="{{ assetPath }}/css/ol.css" type="text/css">
+  <link rel="stylesheet" href="{{ assetPath }}/css/map.css" type="text/css">
+{% endblock %}
+
+{% block beforeForm %}
+  <h1 class="govuk-heading-l">Create an alert</h1>
+{% endblock %}
+
+{% block form %}
+  {{
+    govukSelect({
+      id: "areaCode",
+      name: "areaCode",
+      label: {
+        text: "Area"
+      },
+      value: data.areaCode,
+      errorMessage: errors.areaCode,
+      items: data.items
+    }) 
+  }}
+  {{
+    govukCharacterCount({
+      id: "headline",
+      name: "headline",
+      label: {
+        text: "Headline"
+      },
+      rows: 2,
+      maxlength: MAX_MESSAGE_HEADLINE_LENGTH,
+      value: data.headline,
+      errorMessage: errors.headline
+    }) 
+  }}
+  {{
+    govukCharacterCount({
+      id: "body",
+      name: "body",
+      label: {
+        text: "Body"
+      },
+      rows: 12,
+      maxlength: MAX_MESSAGE_BODY_LENGTH,
+      value: data.body,
+      errorMessage: errors.body
+    }) 
+  }}
+{% endblock %}
+
+{% block oneThird %}
+  <div id="map"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="{{ assetPath }}/vendor/autocomplete/accessible-autocomplete.min.js"></script>
+  <script type="text/javascript">
+    var selectEl = document.querySelector('#areaCode')
+    // var templates = {
+    //   inputValue: (ar) => {
+    //     return ar ? `${ar.code} (${ar.name})` : ''
+    //   },
+    //   suggestion: (ar) => {
+    //     return `
+    //       <p style="margin-bottom: 0;">
+    //         <small>${ar.category}</small><br />
+    //         <b>${ar.code}</b> ${ar.name}
+    //       </p>
+    //     `
+    //   }
+    // }
+
+    accessibleAutocomplete.enhanceSelectElement({
+      autoselect: true,
+      confirmOnBlur: false,
+      defaultValue: '',
+      minLength: 3,
+      displayMenu: 'overlay',
+      selectElement: selectEl,
+      // onConfirm: () => {
+      //   window.XWS.map('', 'map')
+      // }
+    })
+  </script>
+
+  <script src="{{ assetPath }}/vendor/ol/proj4-2.5.0.js"></script>
+  <script src="{{ assetPath }}/vendor/ol/ol.js"></script>
+  <script src="{{ assetPath }}/js/map.js"></script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  {{ 
+    govukButton({
+      text: "Create alert",
+      href: "/choose-alert-template",
+      classes: "govuk-button pull-right"
+    })
+  }}
+  <h1 class="govuk-heading-l">Alerts</h1>
+  <h3 class="govuk-heading-m">Alerts ready for approval</h3>
+  {{
+    govukTable({
+      classes: "govuk-!-margin-bottom-9 govuk-!-font-size-16",
+      head: [
+        { text: "Code" },
+        { text: "Headline" },
+        { text: "Body" },
+        { text: "Created" },
+        { text: "" }
+      ],
+      rows: data.readyForApprovalRows
+    })
+  }}
+  <h3 class="govuk-heading-m">Live alerts</h3>
+  {{
+    govukTable({
+      classes: "govuk-!-font-size-16",
+      head: [
+        { text: "Code" },
+        { text: "Headline" },
+        { text: "Body" },
+        { text: "Approved" },
+        { text: "" }
+      ],
+      rows: data.liveRows
+    })
+  }}
+{% endblock %}

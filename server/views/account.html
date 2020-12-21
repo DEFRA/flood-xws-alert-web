@@ -1,0 +1,10 @@
+{% extends "two-thirds.html" %}
+
+{% block twoThirds %}
+  <span class="govuk-caption-l" data-id="{{ user.id }}">{{ user.email }}</span>
+  <h2 class="govuk-heading-l">Account</h2>
+  <p>Name: <strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+  <p>Role: <strong>{{ credentials.roles.join(',') }}</strong></p>
+  <br>
+  <a class="govuk-button" href="/logout">Sign out</a>
+{% endblock %}
