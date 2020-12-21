@@ -5,4 +5,4 @@ npm-debug.log
 server/public/build
 lcov.info
 server/config*.json
-*.env
+.env

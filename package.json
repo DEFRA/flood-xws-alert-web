@@ -14,8 +14,8 @@
     "deploy:test": "cf login -a api.london.cloud.service.gov.uk -o ea-defra-next-warning-system -s test && cf push defra-next-warning-system-alert-web-test",
     "deploy:production": "cf login -a api.london.cloud.service.gov.uk -o ea-defra-next-warning-system -s production && cf push defra-next-warning-system-alert-web-production"
   },
-  "author": "defra",
-  "license": "OGL",
+  "author": "DEFRA",
+  "license": "OGL-UK-3.0",
   "engines": {
     "node": "12"
   },
