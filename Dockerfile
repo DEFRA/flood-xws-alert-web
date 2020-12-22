@@ -19,8 +19,4 @@ RUN npm run build
 COPY --chown=node:node server ./server/
 COPY --chown=node:node test ./test/
 
-ARG PORT=3000
-ENV PORT ${PORT}
-EXPOSE ${PORT} 9229
 CMD [ "node", "index" ]
-
