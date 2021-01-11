@@ -10,10 +10,10 @@ Internal facing website for issuing alerts
 | ENV                     | Deployment environment          | yes        |           | local,sandbox,test,production |         |
 | HOST                    | Hostname                        | yes        |           |                               |         |
 | PORT                    | Port number                     | yes        |           |                               |         |
-| COOKIE_PASSWORD         | Port number                     | yes        |           |                               |         |
-| COOKIE_IS_SECURE        | Port number                     | yes        |           |                               |         |
-| FORCE_HTTPS             | Port number                     | yes        |           |                               |         |
-| FORCE_HTTPS             | Port number                     | yes        |           |                               |         |
+| COOKIE_PASSWORD         |                                 | yes        |           |                               |         |
+| COOKIE_IS_SECURE        |                                 | yes        |           |                               |         |
+| FORCE_HTTPS             |                                 | yes        |           |                               |         |
+| FORCE_HTTPS             |                                 | yes        |           |                               |         |
 | AD_CLIENT_ID            | Active directory client id      | yes        |           |                               |         |
 | AD_CLIENT_SECRET        | Active directory client sectret | yes        |           |                               |         |
 | AD_TENANT               | Active directory tenant         | yes        |           |                               |         |
@@ -34,9 +34,9 @@ Notes:
 
 # Prerequisites
 
-[Node v12+](https://nodejs.org/en/download/)
-[Docker](https://docs.docker.com/get-docker/) 
-[Cloudfoundry CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
+* [Node v12+](https://nodejs.org/en/download/)
+* [Docker](https://docs.docker.com/get-docker/) 
+* [Cloudfoundry CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
 
 # Running the service
 
