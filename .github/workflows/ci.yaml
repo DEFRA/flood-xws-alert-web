@@ -50,6 +50,7 @@ jobs:
       with:
         node-version: 12
     - run: npm install
+    - run: npm run build --if-present
     - uses: citizen-of-planet-earth/cf-cli-action@master
       with:
         cf_api: https://api.london.cloud.service.gov.uk
