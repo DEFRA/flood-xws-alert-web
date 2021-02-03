@@ -3,7 +3,7 @@ const boom = require('@hapi/boom')
 const BaseModel = require('common/view/model')
 const { scopes } = require('../permissions')
 const { approveAlert, getAlert } = require('../lib/db')
-const { publishAlert } = require('../lib/publish-alert')
+const { issueAlert } = require('../lib/issue-alert')
 
 class Model extends BaseModel {}
 
@@ -52,8 +52,9 @@ module.exports = [
       const approvedAlert = await approveAlert(credentials.user.id, alertId)
 
       if (approvedAlert) {
-        // No await here so we don't keep the user waiting
-        publishAlert(approvedAlert)
+        // Todo: what to do if this fails.
+        // Currently no await so we don't keep the user waiting
+        issueAlert(approvedAlert)
           .catch(err => request.log(['error', 'publish-alert'], err))
       }
 
