@@ -32,12 +32,8 @@ jobs:
         AD_CLIENT_ID: ${{ secrets.AD_CLIENT_ID }}
         AD_CLIENT_SECRET: ${{ secrets.AD_CLIENT_SECRET }}
         AD_TENANT: ${{ secrets.AD_TENANT }}
-        PGHOST: ${{ secrets.PGHOST }}
-        PGPORT: ${{ secrets.PGPORT }}
-        PGUSER: ${{ secrets.PGUSER }}        
-        PGPASSWORD: ${{ secrets.PGPASSWORD }}        
-        PGDATABASE: ${{ secrets.PGDATABASE }}        
-        DB: postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}
+        DB: ${{ secrets.DB }}
+        BROKER_URL: ${{ secrets.BROKER_URL }}
 
   deploy:
     needs: test
