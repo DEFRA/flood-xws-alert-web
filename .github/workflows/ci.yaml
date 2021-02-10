@@ -32,7 +32,7 @@ jobs:
         AD_CLIENT_ID: ${{ secrets.AD_CLIENT_ID }}
         AD_CLIENT_SECRET: ${{ secrets.AD_CLIENT_SECRET }}
         AD_TENANT: ${{ secrets.AD_TENANT }}
-        DB: ${{ secrets.DB }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
         BROKER_URL: ${{ secrets.BROKER_URL }}
 
   deploy:

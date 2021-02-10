@@ -21,7 +21,7 @@ Internal facing website for issuing alerts
 | PHASE_BANNER_HTML       | Banner displayed on home page  | yes        |                               |
 | SERVICE_ID              | Service database id            | yes        | uuid                          |
 | PUBLISHER_ID            | Publisher database id          | yes        | uuid                          |
-| DB                      | Database connection string     | yes        |                               |
+| DATABASE_URL            | Database connection string     | yes        |                               |
 
 As per [12 Factor principles](https://12factor.net/config) application config is stored in environment variables (env vars). For ease of local development the service should have a `.env` file in its root folder. Starter `.env` files for local development for this service are held in the [https://github.com/NeXt-Warning-System/config/alert-web]() repository.
 

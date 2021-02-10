@@ -22,12 +22,9 @@ const schema = joi.object().keys({
   publisherId: joi.string().guid().required(),
   serviceId: joi.string().guid().required(),
   brokerUrl: joi.string().uri().required(),
-  db: joi.string().required()
+  databaseUrl: joi.string().uri().required(),
+  databaseSsl: joi.boolean().default(false)
 })
-
-// Check for cloud foundry DATABASE_URL and append SSL
-const cfDatabaseUrl = process.env.DATABASE_URL &&
-  `${process.env.DATABASE_URL}?ssl=true`
 
 const config = {
   env: process.env.ENV,
@@ -48,7 +45,8 @@ const config = {
   publisherId: process.env.PUBLISHER_ID,
   serviceId: process.env.SERVICE_ID,
   brokerUrl: process.env.BROKER_URL,
-  db: cfDatabaseUrl || process.env.DB
+  databaseUrl: process.env.DATABASE_URL,
+  databaseSsl: process.env.DATABASE_SSL
 }
 
 // Validate config
