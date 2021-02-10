@@ -52,10 +52,13 @@ module.exports = [
       const approvedAlert = await approveAlert(credentials.user.id, alertId)
 
       if (approvedAlert) {
-        // Todo: what to do if this fails.
-        // Currently no await so we don't keep the user waiting
-        issueAlert(approvedAlert)
-          .catch(err => request.log(['error', 'publish-alert'], err))
+        // Todo: really what to do if this fails?
+        try {
+          await issueAlert(approvedAlert)
+        } catch (err) {
+          request.log(['error', 'publish-alert'], err)
+          throw err
+        }
       }
 
       return h.redirect('/alerts')

@@ -19,8 +19,8 @@ const schema = joi.object().keys({
   adTenant: joi.string().required(),
   phaseBannerTag: joi.string().required(),
   phaseBannerHtml: joi.string().required(),
-  organisation: joi.string().default('Environment Agency (EA)'),
-  hazard: joi.string().default('Flood'),
+  publisherId: joi.string().guid().required(),
+  serviceId: joi.string().guid().required(),
   brokerUrl: joi.string().uri().required(),
   db: joi.string().required()
 })
@@ -45,8 +45,8 @@ const config = {
   adTenant: process.env.AD_TENANT,
   phaseBannerTag: process.env.PHASE_BANNER_TAG,
   phaseBannerHtml: process.env.PHASE_BANNER_HTML,
-  organisation: process.env.ORGANISATION,
-  hazard: process.env.HAZARD,
+  publisherId: process.env.PUBLISHER_ID,
+  serviceId: process.env.SERVICE_ID,
   brokerUrl: process.env.BROKER_URL,
   db: cfDatabaseUrl || process.env.DB
 }

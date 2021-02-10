@@ -28,35 +28,15 @@ function upsertUser (userId, firstName, lastName, email) {
   `, [userId, firstName, lastName, email])
 }
 
-// /**
-//  * Find FAA by text string
-//  *
-//  * @param {string} query - Searches across fws_tacode or ta_name
-//  * @returns {Array} List of matching target areas
-//  */
-// async function findFloodAlertAreas (query) {
-//   return query(`
-//     select gid, area, fws_tacode, ta_name from faa
-//     where faa.fws_tacode LIKE $1
-//     or faa.ta_name LIKE $2
-//     limit 50;
-//   `, [`${query}%`, `%${query}%`])
-// }
-
-// /**
-//  * Find FWA by text string
-//  *
-//  * @param {string} query - Searches across fws_tacode or ta_name
-//  * @returns {Array} List of matching target areas
-//  */
-// async function findFloodWarningAreas (query) {
-//   return query(`
-//     select gid, area, fws_tacode, ta_name from faa
-//     where faa.fws_tacode LIKE $1
-//     or faa.ta_name LIKE $2
-//     limit 50;
-//   `, [`${query}%`, `%${query}%`])
-// }
+/**
+ * Get a single alert template
+ *
+ * @param {string} ref - The template ref
+ * @returns {Array} All alert templates
+ */
+async function getAlertTemplate (ref) {
+  return queryOne('select * from xws_alert.alert_template where ref = $1;', [ref])
+}
 
 /**
  * Get all alert templates
@@ -106,8 +86,14 @@ async function getFullArea (code) {
  */
 function insertAlert (userId, templateRef, areaCode, headline, body) {
   return queryOne(`
-    insert into xws_alert.alert(area_code, alert_template_ref, headline, body, created_by_id, updated_by_id)
-    values($1, $2, $3, $4, $5, $5)
+    insert into xws_alert.alert(
+      area_code, service_id, alert_template_ref, cap_msg_type, cap_urgency_name,
+      cap_severity_name, cap_certainty_name, headline, body, created_by_id, updated_by_id)
+      select 
+        $1, service_id, ref as alert_template_ref, cap_msg_type,
+        cap_urgency_name, cap_severity_name, cap_certainty_name, $3, $4, $5, $5
+      from xws_alert.alert_template
+      where ref = $2 limit 1
     returning *
   `, [areaCode, templateRef, headline, body, userId])
 }
@@ -165,28 +151,6 @@ function getLiveAlerts () {
     order by a.created_at
   `)
 }
-
-// /**
-//  * Get all messages that have been recently sent
-//  */
-// function getAllInfoActiveMessages () {
-//   return query(`
-//     select m.*,
-//       g.name as group_name,
-//       g.code as group_code,
-//       g.type as group_type,
-//       CONCAT(u1.first_name, ' ', u1.last_name) as created_by,
-//       CONCAT(u2.first_name, ' ', u2.last_name) as approved_by,
-//       CONCAT(u3.first_name, ' ', u3.last_name) as sent_by
-//     from xws_alert.message m
-//     join xws_alert.group g on g.id = m.group_id
-//     join xws_alert.user u1 on u1.id = m.created_by_id
-//     join xws_alert.user u2 on u2.id = m.approved_by_id
-//     join xws_alert.user u3 on u3.id = m.sent_by_id
-//     where m.sent_by_id is not null and info_active = true
-//     order by m.sent_at desc
-//   `)
-// }
 
 /**
  * Get a single alert
@@ -264,114 +228,25 @@ function approveAlert (userId, alertId) {
   `, [userId, alertId])
 }
 
-// /**
-//  * Send a single message
-//  *
-//  * @param {string} userId - The sent by user id
-//  * @param {string} messageId - The message id
-//  */
-// function sendMessage (userId, messageId) {
-//   return queryOne(`
-//     update xws_alert.message
-//     set
-//       updated_by_id = $1,
-//       updated_at = CURRENT_TIMESTAMP,
-//       sent_by_id = $1,
-//       sent_at = CURRENT_TIMESTAMP,
-//       info_active = CASE WHEN info is not null THEN true ELSE null END
-//     where approved_by_id is not null and sent_by_id is null and id = $2
-//     returning *
-//   `, [userId, messageId])
-// }
-
-// /**
-//  * Get the contact count for a group
-//  *
-//  * @param {object} message - The message object
-//  */
-// function getGroupContactsCount (message) {
-//   const { group_id: groupId } = message
-
-//   return queryOne(`
-//     select count(0) from xws_alert.membership m
-//     join xws_alert.contact c on c.id = m.contact_id
-//     where group_id = $1
-//   `, [groupId])
-// }
-
 /**
- * Enqueue message jobs
+ * Get a single service
  *
- * @param {object} alert - The alert
+ * @param {string} id - The service id
+ * @returns {object} The service
  */
-function enqueueAlertMessageJobs (alert) {
-  return query(`
-    insert into xws_notification.message_queue(queue, data)
-    select
-      'text' as queue,
-      json_build_object('contact', c, 'alert', $1::json) as args
-    from (
-      select distinct c.*
-      from xws_contact.contact c
-      join xws_contact.subscription s
-        on c.id = s.contact_id
-      join xws_contact.location l
-        on l.id = s.location_id
-      join xws_area.area ar
-        on ST_Intersects(l.geom, ar.geom)
-      where c.active = true
-        and c.contact_type_name = 'public'
-        and c.hazard_name = 'flood'
-        ${alert.alert_template_ref === 'fa' ? 'and s.alerts = true' : ''}
-        and ar.code = $2
-    ) as c
-  `, [alert, alert.area_code])
+async function getService (id) {
+  return queryOne('select * from xws_alert.service where id = $1;', [id])
 }
 
-// /**
-//  * Insert message job result
-//  *
-//  * @param {string} reference - The message reference
-//  * @param {object} jobData - The job data
-//  * @param {object} result - The notify result
-//  */
-// function insertMessageJobSentResult (reference, jobData, result) {
-//   return query(`
-//     insert into xws_alert.message_sent(reference, message_id, contact_id, mobile, result)
-//     values ($1, $2, $3, $4, $5::json)
-//   `, [reference, jobData.message.id, jobData.contact.id, jobData.contact.mobile, result])
-// }
-
-// /**
-//  * Update message sent result with notify delivery data
-//  *
-//  * @param {object} deliveryResult - The notify delivery result
-//  */
-// function updateMessageJobSentDeliveryResult (deliveryResult) {
-//   return query(`
-//     update xws_alert.message_sent
-//     set
-//       delivery_status = $2,
-//       delivery_to = $3,
-//       delivery_result = $4,
-//       delivery_created_at = CURRENT_TIMESTAMP
-//     where reference = $1
-//   `, [deliveryResult.reference, deliveryResult.status, deliveryResult.to, deliveryResult])
-// }
-
-// /**
-//  * Insert message job failed result
-//  *
-//  * @param {string} reference - The message reference
-//  * @param {object} jobData - The job data
-//  * @param {object} result - The notify result
-//  */
-// function insertMessageJobFailedResult (reference, jobData, result) {
-//   return query(`
-//     insert into xws_alert.message_failed(reference, message_id, contact_id, mobile, result)
-//     values ($1, $2, $3, $4, $5::json)
-//   `, [reference, jobData.message.id, jobData.contact.id, jobData.contact.mobile, result])
-// }
+/**
+ * Get a single publisher
+ *
+ * @param {string} id - The publisher id
+ * @returns {object} The publisher
+ */
+async function getPublisher (id) {
+  return queryOne('select * from xws_alert.publisher where id = $1;', [id])
+}
 
 module.exports = {
   pool,
@@ -382,19 +257,15 @@ module.exports = {
   getFullArea,
   getAreas,
   getAreaAlerts,
+  getAlertTemplate,
   getAlertTemplates,
   insertAlert,
   updateAlert,
   getAllAlertsReadyForApproval,
   getLiveAlerts,
   getAlert,
-  // sendMessage,
   approveAlert,
   deleteAlert,
-  // deactivateMessage,
-  // getGroupContactsCount,
-  enqueueAlertMessageJobs
-  // insertMessageJobSentResult,
-  // insertMessageJobFailedResult,
-  // updateMessageJobSentDeliveryResult
+  getService,
+  getPublisher
 }

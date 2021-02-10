@@ -1,13 +1,11 @@
-const { organisation, hazard } = require('../config')
-
 module.exports = [
   {
     method: 'GET',
     path: '/',
     handler: (request, h) => {
       return h.view('home', {
-        organisation,
-        hazard
+        organisation: 'Environment Agency (EA)',
+        hazard: 'Flood'
       })
     },
     options: {
