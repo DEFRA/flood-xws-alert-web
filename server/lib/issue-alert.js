@@ -53,14 +53,7 @@ function buildCapAlert (alert, area, service, publisher) {
   // Todo: Add polygon
   // capArea.addPolygon(...)
 
-  return {
-    identifier,
-    alert: capAlert.toXml(),
-    sender,
-    source,
-    areaCode,
-    areaName
-  }
+  return capAlert.toXml()
 }
 
 /**
@@ -74,9 +67,9 @@ async function issueAlert (alert) {
   const area = await getArea(areaCode)
   const service = await getService(alert.service_id)
   const publisher = await getPublisher(service.publisher_id)
-  const capAlertResult = buildCapAlert(alert, area, service, publisher)
+  const capAlert = buildCapAlert(alert, area, service, publisher)
 
-  return publish(brokerUrl, topic, capAlertResult)
+  return publish(brokerUrl, topic, { alert: capAlert })
 }
 
 module.exports = { issueAlert }
