@@ -27,6 +27,7 @@
     "@hapi/hoek": "9.1.0",
     "@hapi/inert": "6.0.3",
     "@hapi/vision": "6.0.1",
+    "aws-sdk": "2.848.0",
     "blipp": "4.0.2",
     "caplib": "github:NeXt-Warning-System/caplib",
     "common": "github:NeXt-Warning-System/common",
