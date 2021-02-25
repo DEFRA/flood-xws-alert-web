@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 const { Alert } = require('caplib')
 const date = require('./date')
 const { getArea, getService, getPublisher } = require('../lib/db')
-const bucketName = 'xws-files-dev'
+const { bucketName } = require('../config')
 
 /**
  * Convert an alert to cap. Currently uses the
@@ -88,7 +88,8 @@ async function saveToS3 (key, body) {
   const params = {
     Bucket: bucketName,
     Key: key,
-    Body: body
+    Body: body,
+    ContentType: 'text/xml'
   }
 
   const putObjectResult = await s3bucket.putObject(params).promise()
