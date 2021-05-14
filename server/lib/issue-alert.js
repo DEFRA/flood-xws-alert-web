@@ -1,9 +1,8 @@
-const date = require('./date')
+const AWS = require('aws-sdk')
 const { Alert } = require('caplib')
-const { publish } = require('core/pubsub')
-const { EVENTS } = require('core/events')
-const { brokerUrl } = require('../config')
+const date = require('./date')
 const { getArea, getService, getPublisher } = require('../lib/db')
+const { bucketName } = require('../config')
 
 /**
  * Convert an alert to cap. Currently uses the
@@ -53,7 +52,19 @@ function buildCapAlert (alert, area, service, publisher) {
   // Todo: Add polygon
   // capArea.addPolygon(...)
 
-  return capAlert.toXml()
+  const xml = addStylesheet('./alert-style.xsl', capAlert.toXml())
+
+  return xml
+}
+
+// Add XSL stylesheet processing instruction
+function addStylesheet (href, xml) {
+  const declaration = '<?xml version="1.0" encoding="utf-8"?>\n'
+  const decExists = xml.includes(declaration)
+  const insertIdx = decExists ? declaration.length : 0
+  const instruction = `<?xml-stylesheet type="text/xsl" href="${href}"?>\n`
+
+  return xml.substring(0, insertIdx) + instruction + xml.substring(insertIdx)
 }
 
 /**
@@ -62,14 +73,28 @@ function buildCapAlert (alert, area, service, publisher) {
  * @param {object} alert - The alert to issue
  */
 async function issueAlert (alert) {
-  const topic = EVENTS.alert.alert.issued
   const areaCode = alert.area_code
   const area = await getArea(areaCode)
   const service = await getService(alert.service_id)
   const publisher = await getPublisher(service.publisher_id)
   const capAlert = buildCapAlert(alert, area, service, publisher)
 
-  return publish(brokerUrl, topic, { alert: capAlert })
+  return saveToS3(`alerts/${alert.id}.xml`, capAlert)
+}
+
+async function saveToS3 (key, body) {
+  const s3bucket = new AWS.S3()
+
+  const params = {
+    Bucket: bucketName,
+    Key: key,
+    Body: body,
+    ContentType: 'text/xml'
+  }
+
+  const putObjectResult = await s3bucket.putObject(params).promise()
+
+  return putObjectResult
 }
 
 module.exports = { issueAlert }
