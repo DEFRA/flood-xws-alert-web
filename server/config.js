@@ -21,7 +21,6 @@ const schema = joi.object().keys({
   phaseBannerHtml: joi.string().required(),
   publisherId: joi.string().guid().required(),
   serviceId: joi.string().guid().required(),
-  brokerUrl: joi.string().uri().required(),
   databaseUrl: joi.string().uri().required(),
   databaseSsl: joi.boolean().default(false),
   bucketName: joi.string().required()
@@ -45,7 +44,6 @@ const config = {
   phaseBannerHtml: process.env.PHASE_BANNER_HTML,
   publisherId: process.env.PUBLISHER_ID,
   serviceId: process.env.SERVICE_ID,
-  brokerUrl: process.env.BROKER_URL,
   databaseUrl: process.env.DATABASE_URL,
   databaseSsl: process.env.DATABASE_SSL,
   bucketName: process.env.BUCKET_NAME
