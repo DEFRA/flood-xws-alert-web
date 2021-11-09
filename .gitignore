@@ -4,3 +4,4 @@ node_modules
 npm-debug.log
 server/public/build
 .env
+lcov.info
