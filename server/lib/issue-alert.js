@@ -79,8 +79,7 @@ async function issueAlert (alert) {
   const publisher = await getPublisher(service.publisher_id)
   const capAlert = buildCapAlert(alert, area, service, publisher)
 
-  console.log(capAlert)
-  // return saveToS3(`alerts/${alert.id}.xml`, capAlert)
+  return saveToS3(`alerts/${alert.id}.xml`, capAlert)
 }
 
 async function saveToS3 (key, body) {
