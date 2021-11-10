@@ -88,10 +88,10 @@ async function getFullArea (code) {
 function insertAlert (userId, templateRef, areaCode, headline, body) {
   return queryOne(`
     insert into xws_alert.alert(
-      area_code, service_id, alert_template_ref, cap_msg_type, cap_urgency_name,
+      area_code, service_id, alert_template_ref, cap_msg_type_name, cap_urgency_name,
       cap_severity_name, cap_certainty_name, headline, body, created_by_id, updated_by_id)
       select 
-        $1, service_id, ref as alert_template_ref, cap_msg_type,
+        $1, service_id, ref as alert_template_ref, cap_msg_type_name,
         cap_urgency_name, cap_severity_name, cap_certainty_name, $3, $4, $5, $5
       from xws_alert.alert_template
       where ref = $2 limit 1
