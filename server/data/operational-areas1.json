@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Cumbria",
+    "region": "Cumbria and Lancashire"
+  },
+  {
+    "name": "Lancashire",
+    "region": "Cumbria and Lancashire"
+  },
+  {
+    "name": "Cornwall and IOS",
+    "region": "Devon and Cornwall"
+  },
+  {
+    "name": "Devon",
+    "region": "Devon and Cornwall"
+  },
+  {
+    "name": "Cambridgeshire and Bedfordshire",
+    "region": "East Anglia"
+  },
+  {
+    "name": "Essex, Norfolk and Suffolk",
+    "region": "East Anglia"
+  },
+  {
+    "name": "East Midlands",
+    "region": "East Midlands"
+  },
+  {
+    "name": "Gtr Mancs Mersey and Ches",
+    "region": "Gtr Mancs Mersey and Ches"
+  },
+  {
+    "name": "Herts and North London",
+    "region": "Herts and North London"
+  },
+  {
+    "name": "Kent S London and E Sussex",
+    "region": "Kent S London and E Sussex"
+  },
+  {
+    "name": "Lincs and Northants",
+    "region": "Lincs and Northants"
+  },
+  {
+    "name": "North East",
+    "region": "North East"
+  },
+  {
+    "name": "Solent and South Downs",
+    "region": "Solent and South Downs"
+  },
+  {
+    "name": "Thames",
+    "region": "Thames"
+  },
+  {
+    "name": "North",
+    "region": "Wessex"
+  },
+  {
+    "name": "South",
+    "region": "Wessex"
+  },
+  {
+    "name": "East",
+    "region": "West Midlands"
+  },
+  {
+    "name": "West",
+    "region": "West Midlands"
+  },
+  {
+    "name": "North and East",
+    "region": "Yorkshire"
+  },
+  {
+    "name": "South and West",
+    "region": "Yorkshire"
+  }
+ ]

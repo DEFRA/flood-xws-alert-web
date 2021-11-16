@@ -1,63 +1,45 @@
 const joi = require('joi')
-const BaseModel = require('common/view/model')
-const date = require('../lib/date')
-const { getArea, getAreaAlerts } = require('../lib/db')
-
-class Model extends BaseModel {}
+const { areasMap, getTargetAreas } = require('../lib/data')
+const { getAreaCounts, getAlerts } = require('../lib/ddb')
 
 module.exports = [
   {
     method: 'GET',
-    path: '/area/{code}',
+    path: '/area/{id}',
     handler: async (request, h) => {
-      const { code } = request.params
-      const area = await getArea(code)
-      const draftAreaAlerts = await getAreaAlerts(code, null, 'updated_at DESC', 20)
-      const liveAreaAlerts = await getAreaAlerts(code, true, null, 1)
-      const historicAreaAlerts = await getAreaAlerts(code, null, 'approved_at DESC', 20, true)
+      const areaId = request.params.id
+      const area = areasMap.get(areaId)
+      const areaCounts = await getAreaCounts(areaId)
+      const alerts = await getAlerts(areaId)
+      const targetAreas = getTargetAreas(areaId)
+      const alertAreas = targetAreas.filter(a => !a.isWarningArea)
+      const warningAreas = targetAreas.filter(a => a.isWarningArea)
 
-      const draftAreaRows = draftAreaAlerts
-        .map(alert => {
-          return [
-            { text: alert.headline },
-            { text: alert.body },
-            { text: `${date(alert.updated_at).fromNow()} by ${alert.updated_by}` },
-            { html: `<a href='/alert/${alert.id}'>View</a>` }
-          ]
-        })
+      const alertRows = alerts.map(a => ([
+        { text: a.sk.substr(6) },
+        { text: a.type },
+        { text: a.updated }
+      ]))
 
-      const liveAreaRows = liveAreaAlerts
-        .map(alert => {
-          return [
-            { text: alert.headline },
-            { text: alert.body },
-            { text: `${date(alert.created_at).fromNow()} by ${alert.created_by}` },
-            { html: `<a href='/alert/${alert.id}'>View</a>` }
-          ]
-        })
-
-      const historicAreaRows = historicAreaAlerts
-        .map(alert => {
-          return [
-            { text: alert.headline },
-            { text: alert.body },
-            { text: `${date(alert.approved_at).fromNow()} by ${alert.approved_by}` },
-            { html: `<a href='/alert/${alert.id}'>View</a>` }
-          ]
-        })
-
-      return h.view('area', new Model({
+      return h.view('area', {
         area,
-        draftAreaRows,
-        liveAreaRows,
-        historicAreaRows
-      }))
+        areaId,
+        faCount: areaCounts.fa,
+        fwCount: areaCounts.fw,
+        sfwCount: areaCounts.sfw,
+        faaCount: alertAreas.length,
+        fwaCount: warningAreas.length,
+        alertRows
+      })
     },
     options: {
+      auth: {
+        mode: 'try'
+      },
       validate: {
         params: joi.object().keys({
-          code: joi.string().required()
-        }).required()
+          id: joi.string().required().valid(...areasMap.keys())
+        })
       }
     }
   }

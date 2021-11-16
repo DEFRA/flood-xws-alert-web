@@ -1,34 +1,71 @@
 {% extends "layout.html" %}
 
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Alert system</h1>
-    <p>Use this service to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>manage {{organisation}} {{hazard}} alerts</li>
-    </ul>
-
-    {{
-      govukButton({
-        text: "Start now",
-        href: "/alerts",
-        isStartButton: true
-      })
-    }}
+    <h1 class="govuk-heading-xl">National flooding overview</h1>
   </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-8">
   <div class="govuk-grid-column-one-third">
-    <aside class="app-related-items" role="complementary">
-      <h2 class="govuk-heading-m" id="subsection-title">Related information</h2>
-      <nav aria-labelledby="subsection-title" role="navigation">
-        <ul class="govuk-list govuk-body-s">
-          <li><a href="https://flood-warning-information.service.gov.uk/">Flood information service website</a></li> 
-          <li><a href="tel:03459881188">Floodline - 0345 988 1188</a></li>
-        </ul>
-      </nav>
-    </aside>
+    <div class="app-statistic-header-row govuk-!-margin-bottom-2">
+      <div class="app-statistic-header-icon">
+        <img src="{{ assetPath }}/images/alert-types/alert.gif" alt="Flood alert icon">
+      </div>
+      <span class="app-statistic-header-detail govuk-heading-l govuk-!-margin-bottom-0">
+        {{ faCount }}
+      </span>
+    </div>
+    <span class="app-statistic-content govuk-heading-m">
+      Flood alerts in force
+    </span>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <div class="app-statistic-header-row govuk-!-margin-bottom-2">
+      <div class="app-statistic-header-icon">
+        <img src="{{ assetPath }}/images/alert-types/warning.gif" alt="Flood warning icon">
+      </div>
+      <span class="app-statistic-header-detail govuk-heading-l govuk-!-margin-bottom-0">
+        {{ fwCount }}
+      </span>
+    </div>
+    <span class="app-statistic-content govuk-heading-m">
+      Flood warnings in force
+    </span>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <div class="app-statistic-header-row govuk-!-margin-bottom-2">
+      <div class="app-statistic-header-icon">
+        <img src="{{ assetPath }}/images/alert-types/severe-warning.gif" alt="Severe flood warning icon">
+      </div>
+      <span class="app-statistic-header-detail govuk-heading-l govuk-!-margin-bottom-0">
+        {{ sfwCount}}
+      </span>
+    </div>
+    <span class="app-statistic-content govuk-heading-m">
+      Severe flood warnings in force
+    </span>
+  </div>
+</div>
+
+<div class='govuk-grid-row'>
+  <div class="govuk-grid-column-full">
+      {{ govukTable({
+          caption: 'Areas',
+          captionClasses: 'govuk-visually-hidden',
+          firstCellIsHeader: false,
+          attributes: { 'data-module': 'moj-sortable-table' },
+          head: [
+            { text: 'Area', attributes: { 'aria-sort': 'ascending' } },
+            { text: 'Alerts in force', attributes: { 'aria-sort': 'none' }, format: 'numeric' },
+            { text: 'Warnings in force', attributes: { 'aria-sort': 'none' }, format: 'numeric' },
+            { text: 'Severe warnings in force', attributes: { 'aria-sort': 'none' }, format: 'numeric' }
+          ],
+          rows: rows
+      }) }}
   </div>
 </div>
 {% endblock %}

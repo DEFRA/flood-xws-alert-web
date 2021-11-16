@@ -26,6 +26,8 @@
 {% from "govuk/components/textarea/macro.njk"         import govukTextarea %}
 {% from "govuk/components/warning-text/macro.njk"     import govukWarningText %}
 
+{% from "./components/area-banner.html" import areaBanner %}
+
 {%
   set govukComponents = {
     govukAccordion: govukAccordion,
@@ -55,37 +57,25 @@
     govukWarningText: govukWarningText
   }
 %}
+
 {% block head %}
-<!--[if !IE 8]><!-->
-<link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
-<!--<![endif]-->
+  <!-- <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" /> -->
+  <link href="{{ assetPath }}/stylesheets/unbranded.css" rel="stylesheet" />
 
-{# For Internet Explorer 8, you need to compile specific stylesheet #}
-{# see https://github.com/alphagov/govuk-frontend/blob/master/docs/installation/supporting-internet-explorer-8.md #}
-<!--[if IE 8]>
-    <link href="{{ assetPath }}/govuk-frontend/all-ie8.css" rel="stylesheet" />
-  <![endif]-->
-
-{# For older browsers to allow them to recognise HTML5 elements such as `<header>` #}
-<!--[if lt IE 9]>
-    <script src="/html5-shiv/html5shiv.js"></script>
-  <![endif]-->
-<script>
-  window.XWS = {}
-</script>
-
-{% block styles %}
-{% endblock %}
+  {% block styles %}
+  {% endblock %}
 {% endblock %}
 
 {% block header %}
-{{ govukHeader({
-    homepageUrl: "https://www.gov.uk",
-    containerClasses: "govuk-width-container",
-    serviceName: serviceName,
-    serviceUrl: "/",
-    navigation: navigation
-  }) }}
+  {{ govukHeader({
+      homepageUrl: "https://www.gov.uk",
+      containerClasses: "govuk-width-container",
+      serviceName: serviceName,
+      serviceUrl: "/",
+      navigation: navigation
+    }) }}
+
+  {% block contextBanner %}{% endblock %}
 {% endblock %}
 
 {% block pageTitle %}
@@ -93,27 +83,23 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{
-    govukPhaseBanner({
-      tag: {
-        text: phaseBannerTag
-      },
-      html: phaseBannerHtml
-    })
-  }}
-  <div class="no">
-  {{ govukBackLink({ text: "Back", href: "javascript:history.back()" }) }}
-  </div>
 {% endblock %}
 
 {% block content %}
 <h1 class="govuk-heading-xl">Default page template</h1>
 {% endblock %}
 
-{% block bodyEnd %}
-{# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-<script src="{{ assetPath }}/all.js"></script>
-<script>window.GOVUKFrontend.initAll()</script>
-{% block scripts %}
+{% block footer %}
+  {% include "partials/footer.html" %} 
 {% endblock %}
+
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script src="{{ assetPath }}/jquery.js"></script>
+  <script src="{{ assetPath }}/all.js"></script>
+  <script src="{{ assetPath }}/mojall.js"></script>
+  <script>window.GOVUKFrontend.initAll()</script>
+  <script>window.MOJFrontend.initAll()</script>
+  {% block scripts %}
+  {% endblock %}
 {% endblock %}

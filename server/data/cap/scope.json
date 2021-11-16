@@ -1,0 +1,11 @@
+[
+  {
+      "name": "Private"
+  },
+  {
+      "name": "Public"
+  },
+  {
+      "name": "Restricted"
+  }
+]

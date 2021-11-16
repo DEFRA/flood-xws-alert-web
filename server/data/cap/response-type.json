@@ -1,0 +1,29 @@
+[
+  {
+      "name": "AllClear"
+  },
+  {
+      "name": "Assess"
+  },
+  {
+      "name": "Avoid"
+  },
+  {
+      "name": "Evacuate"
+  },
+  {
+      "name": "Execute"
+  },
+  {
+      "name": "Monitor"
+  },
+  {
+      "name": "None"
+  },
+  {
+      "name": "Prepare"
+  },
+  {
+      "name": "Shelter"
+  }
+]

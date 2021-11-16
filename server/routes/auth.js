@@ -1,6 +1,6 @@
 const boom = require('@hapi/boom')
 const config = require('../config')
-const { upsertUser } = require('../lib/db')
+const { upsertUser } = require('../lib/ddb')
 const { permissions } = require('../permissions')
 
 function getPermissions (roles) {
@@ -44,16 +44,16 @@ module.exports = [
 
       const user = await upsertUser(id, firstName, lastName, email)
 
-      if (!user.active) {
-        return boom.forbidden('Insufficient permissions')
-      }
+      // if (!user.active) {
+      //   return boom.forbidden('Insufficient permissions')
+      // }
 
       // Set the authentication cookie
       request.cookieAuth.set({ user, roles, scope })
 
       const redirectTo = credentials.query && credentials.query.redirectTo
 
-      return h.redirect(redirectTo || '/alerts')
+      return h.redirect(redirectTo || '/')
     },
     options: {
       auth: 'azuread'

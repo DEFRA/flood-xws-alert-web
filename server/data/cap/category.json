@@ -1,0 +1,38 @@
+[
+  {
+      "name": "CBRNE"
+  },
+  {
+      "name": "Env"
+  },
+  {
+      "name": "Fire"
+  },
+  {
+      "name": "Geo"
+  },
+  {
+      "name": "Health"
+  },
+  {
+      "name": "Infra"
+  },
+  {
+      "name": "Met"
+  },
+  {
+      "name": "Other"
+  },
+  {
+      "name": "Rescue"
+  },
+  {
+      "name": "Safety"
+  },
+  {
+      "name": "Security"
+  },
+  {
+      "name": "Transport"
+  }
+]

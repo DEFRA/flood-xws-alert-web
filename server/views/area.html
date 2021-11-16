@@ -1,61 +1,95 @@
 {% extends "layout.html" %}
 
+{% block contextBanner %}
+{{ areaBanner({
+area: area
+}) }}
+{% endblock %}
+
 {% block content %}
-  <span class="govuk-caption-l">{{data.area.region}}</span>
-  <h1 class="govuk-heading-l">{{data.area.name}} ({{data.area.code}})</h1>
-  <p class="govuk-body-l">{{data.area.description}}</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">{{ area.name }} overview</h1>
+  </div>
+</div>
 
-  <h3 class="govuk-heading-s">Alerts ready for approval</h3>
-  {% if data.draftAreaRows.length %}
-    {{
-      govukTable({
-        classes: "govuk-!-margin-bottom-9 govuk-!-font-size-16",
-        head: [
-          { text: "Headline" },
-          { text: "Body" },
-          { text: "Updated" },
-          { text: "" }
-        ],
-        rows: data.draftAreaRows
-      })
-    }}
-  {% else %}
-    <p class="govuk-body">There are no alerts ready for approval</p>
-  {% endif %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <div class="app-statistic-header-row govuk-!-margin-bottom-2">
+          <div class="app-statistic-header-icon">
+            <img src="{{ assetPath }}/images/alert-types/alert.gif" alt="Flood alert icon">
+          </div>
+          <span class="app-statistic-header-detail govuk-heading-l govuk-!-margin-bottom-0">
+            {{ faCount }}
+          </span>
+        </div>
+        <span class="app-statistic-content govuk-heading-s">
+          Flood alerts in force
+        </span>
+      </div>
 
-  <h3 class="govuk-heading-s">Live alerts</h3>
-  {% if data.liveAreaRows.length %}
-    {{
-      govukTable({
-        classes: "govuk-!-font-size-16",
-        head: [
-          { text: "Headline" },
-          { text: "Body" },
-          { text: "Approved" },
-          { text: "" }
-        ],
-        rows: data.liveAreaRows
-      })
-    }}
-  {% else %}
-    <p class="govuk-body">There are no live alerts</p>
-  {% endif %}
- 
-  <h3 class="govuk-heading-s">Historic alerts</h3>
-  {% if data.historicAreaRows.length %}
-    {{
-      govukTable({
-        classes: "govuk-!-font-size-16",
-        head: [
-          { text: "Headline" },
-          { text: "Body" },
-          { text: "Approved" },
-          { text: "" }
-        ],
-        rows: data.historicAreaRows
-      })
-    }}
-  {% else %}
-    <p class="govuk-body">There are no historic alerts</p>
-  {% endif %}
+      <div class="govuk-grid-column-one-third">
+        <div class="app-statistic-header-row govuk-!-margin-bottom-2">
+          <div class="app-statistic-header-icon">
+            <img src="{{ assetPath }}/images/alert-types/warning.gif" alt="Flood warning icon">
+          </div>
+          <span class="app-statistic-header-detail govuk-heading-l govuk-!-margin-bottom-0">
+            {{ fwCount }}
+          </span>
+        </div>
+        <span class="app-statistic-content govuk-heading-s">
+          Flood warnings in force
+        </span>
+      </div>
+
+      <div class="govuk-grid-column-one-third">
+        <div class="app-statistic-header-row govuk-!-margin-bottom-2">
+          <div class="app-statistic-header-icon">
+            <img src="{{ assetPath }}/images/alert-types/severe-warning.gif" alt="Severe flood warning icon">
+          </div>
+          <span class="app-statistic-header-detail govuk-heading-l govuk-!-margin-bottom-0">
+            {{ sfwCount}}
+          </span>
+        </div>
+        <span class="app-statistic-content govuk-heading-s">
+          Severe flood warnings in force
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">All flood target areas</h2>
+    <ul class="govuk-list">
+      <li>
+        <a href="/area/{{ area.id }}/target-areas?ta-type=warning" class="govuk-link--no-visited-state">
+          {{ fwaCount }} flood warning target areas
+        </a>
+      </li>
+      <li>
+        <a href="/area/{{ area.id }}/target-areas?ta-type=alert" class="govuk-link--no-visited-state">
+          {{ faaCount }} flood alert target areas
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class='govuk-grid-row'>
+  <div class="govuk-grid-column-full">
+    {{ govukTable({
+      caption: 'Area situation',
+      captionClasses: 'govuk-visually-hidden',
+      firstCellIsHeader: false,
+      attributes: { 'data-module': 'moj-sortable-table' },
+      head: [
+        { text: 'Target Area', attributes: { 'aria-sort': 'none' } },
+        { text: 'Type', attributes: { 'aria-sort': 'none' } },
+        { text: 'Update or remove due', attributes: { 'aria-sort': 'ascending' } }
+      ],
+      rows: alertRows
+    }) }}
+  </div>
+</div>
 {% endblock %}
