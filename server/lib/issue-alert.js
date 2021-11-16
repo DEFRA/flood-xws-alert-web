@@ -28,7 +28,7 @@ function buildCapAlert (alert, area, service, publisher) {
   capAlert.identifier = identifier
   capAlert.sender = sender
   capAlert.sent = date().format()
-  capAlert.msgType = alert.cap_msg_type
+  capAlert.msgType = alert.cap_msg_type_name
   capAlert.source = source
 
   // Todo: support multiple infos for Welsh?
