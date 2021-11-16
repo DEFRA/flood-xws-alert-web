@@ -1,0 +1,17 @@
+[
+  {
+      "name": "Likely"
+  },
+  {
+      "name": "Observed"
+  },
+  {
+      "name": "Possible"
+  },
+  {
+      "name": "Unknown"
+  },
+  {
+      "name": "Unlikely"
+  }
+]

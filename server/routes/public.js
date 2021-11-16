@@ -34,4 +34,25 @@ module.exports = [
     options: {
       auth: false
     }
-  }]
+  },
+  {
+    method: 'GET',
+    path: '/assets/jquery.js',
+    handler: {
+      file: 'node_modules/jquery/dist/jquery.min.js'
+    },
+    options: {
+      auth: false
+    }
+  },
+  {
+    method: 'GET',
+    path: '/assets/mojall.js',
+    handler: {
+      file: 'node_modules/@ministryofjustice/frontend/moj/all.js'
+    },
+    options: {
+      auth: false
+    }
+  }
+]

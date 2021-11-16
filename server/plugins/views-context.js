@@ -31,9 +31,9 @@ module.exports = {
 
             navigation.push(
               {
-                href: '/alerts',
+                href: '/',
                 text: 'Alerts',
-                active: request.path === '/alerts'
+                active: request.path === '/'
               },
               {
                 href: '/choose-alert-template',
@@ -44,10 +44,6 @@ module.exports = {
                 href: '/account',
                 text: 'Account',
                 active: request.path === '/account'
-              },
-              {
-                href: config.documentationHomePage,
-                text: 'Documentation'
               }
             )
 

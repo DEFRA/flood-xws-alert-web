@@ -2,7 +2,6 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const pkg = require('../../package.json')
-const analyticsAccount = config.analyticsAccount
 const serviceName = 'Alert system'
 
 module.exports = {
@@ -32,15 +31,12 @@ module.exports = {
     },
     path: '../views',
     relativeTo: __dirname,
-    isCached: !config.isLocal,
+    isCached: !config.isDev,
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
       serviceName: serviceName,
-      pageTitle: `${serviceName}`,
-      analyticsAccount: analyticsAccount,
-      phaseBannerTag: config.phaseBannerTag,
-      phaseBannerHtml: config.phaseBannerHtml
+      pageTitle: `${serviceName}`
     }
   }
 }
