@@ -3,9 +3,11 @@ const areas = require('../data/areas.json')
 const regions = require('../data/regions.json')
 const targetAreasData = require('../data/target-areas.json')
 const isWarningArea = code => code.charAt(4).toUpperCase() === 'W'
+
 const areasMap = new Map(areas.map(area => [area.id, area]))
 const regionsMap = new Map(regions.map(region => [region.id, region]))
 const groupedAreas = groupBy(areas, 'regionId')
+
 const ownersMap = new Map(areas.map(area => {
   const group = groupedAreas[area.regionId]
   const region = regionsMap.get(area.regionId)
@@ -38,18 +40,6 @@ const targetAreas = targetAreasData
 function getTargetAreas (areaId) {
   return targetAreas.filter(ta => ta.area.id === areaId)
 }
-
-// const categories = Object
-//   .keys(groupBy(areas, 'category'))
-//   .sort()
-
-// const types = Object
-//   .keys(groupBy(areas, 'type'))
-//   .sort()
-
-// const regions = Object
-//   .keys(groupBy(operationalAreas, 'region'))
-//   .sort()
 
 module.exports = {
   areas,

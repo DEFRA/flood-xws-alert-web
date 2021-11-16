@@ -16,8 +16,6 @@ const schema = joi.object().keys({
   adClientId: joi.string().required(),
   adClientSecret: joi.string().required(),
   adTenant: joi.string().required(),
-  publisherId: joi.string().guid().required(),
-  serviceId: joi.string().guid().required(),
   dynamodbTableName: joi.string().required()
 })
 
