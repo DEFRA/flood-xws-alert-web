@@ -1,0 +1,14 @@
+{% macro areaCategoryTag(type) %}
+  {% if type == "t" %}
+    <strong class="govuk-tag govuk-tag--purple">tidal</strong>
+  {% elif type == "c" %}
+    <strong class="govuk-tag govuk-tag--pink">coastal</strong>
+  {% elif type == "f" %}
+    <strong class="govuk-tag govuk-tag--turquoise">fluvial</strong>
+  {% elif type == "g" %}
+    <strong class="govuk-tag govuk-tag--grey">groundwater</strong>
+  {% elif type == "b" %}
+    <strong class="govuk-tag govuk-tag--turquoise">fluvial</strong>
+    <strong class="govuk-tag govuk-tag--purple">tidal</strong>
+  {% endif %}
+{% endmacro %}

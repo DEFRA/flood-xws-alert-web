@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block contextBanner %}
+  <div class="app-context-banner">
+    <div class="govuk-width-container">
+      {{ govukBreadcrumbs({
+        items: [
+          { text: "England", href: "/" },
+          { text: area.name, href: "/area/" + area.id },
+          { text: targetArea.name }
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      {{ targetArea.name }} flood {{ "warning" if targetArea.isWarningArea else "alert" }} area
+    </h1>
+  </div>
+</div>
+
+<div class='govuk-grid-row'>
+  <div class="govuk-grid-column-two-thirds">
+    <pre>{{ area | dump(2) | safe }}</pre>
+    <pre>{{ targetArea | dump(2) | safe }}</pre>
+    <pre>{{ alert | dump(2) | safe }}</pre>
+
+    {% if alert %}
+      {{ govukButton ({
+        text: 'Update',
+        href: '#',
+        classes: 'govuk-!-margin-bottom-2'
+      }) }}
+      <br>
+      {{ govukButton ({
+        text: 'Remove',
+        href: '#',
+        classes: 'govuk-button--warning govuk-!-margin-bottom-2'
+      }) }}
+    {% else %}
+      {{ govukInsetText ({
+        text: 'No flood ' + ("warning" if targetArea.isWarningArea else "alert") + ' in force'
+      }) }}
+
+      {{ govukButton ({
+          text: 'Issue a flood ' + ("warning" if targetArea.isWarningArea else "alert"),
+          href: 'prepare-message/severity',
+          classes: 'govuk-!-margin-bottom-2'
+      }) }}
+    {% endif %}
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Target area information</h2>
+    <dl class="govuk-summary-list app-summary-list-vertical">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Code</dt>
+        <dd class="govuk-summary-list__value">{{ targetArea.code }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Name</dt>
+        <dd class="govuk-summary-list__value">{{ targetArea.name }}</dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Target area type</dt>
+        <dd class="govuk-summary-list__value">
+          {{ targetAreaTypeTag(targetArea.type) }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Flooding type</dt>
+        <dd class="govuk-summary-list__value">
+          {{ areaCategoryTag(targetArea.category) }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Description</dt>
+        <dd class="govuk-summary-list__value">{{ targetArea.description }}</dd>
+      </div>
+    </dl>
+  </div>
+</div>
+{% endblock %}

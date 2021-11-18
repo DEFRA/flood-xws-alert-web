@@ -2,7 +2,8 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const pkg = require('../../package.json')
-const serviceName = 'Alert system'
+const { alertTypeTag } = require('../lib/filters')
+const serviceName = 'Manage flood alerts'
 
 module.exports = {
   plugin: require('@hapi/vision'),
@@ -17,12 +18,17 @@ module.exports = {
           }
         },
         prepare: (options, next) => {
-          options.compileOptions.environment = nunjucks.configure([
+          const env = options.compileOptions.environment = nunjucks.configure([
             path.join(options.relativeTo || process.cwd(), options.path),
             'node_modules/govuk-frontend/'
           ], {
             autoescape: true,
             watch: false
+          })
+
+          // Register filters
+          env.addFilter('alert_type_tag', type => {
+            return alertTypeTag(type)
           })
 
           return next()
@@ -36,7 +42,8 @@ module.exports = {
       appVersion: pkg.version,
       assetPath: '/assets',
       serviceName: serviceName,
-      pageTitle: `${serviceName}`
+      pageTitle: `${serviceName}`,
+      alertTypeTag
     }
   }
 }

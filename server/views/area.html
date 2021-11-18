@@ -1,9 +1,16 @@
 {% extends "layout.html" %}
 
 {% block contextBanner %}
-{{ areaBanner({
-area: area
-}) }}
+  <div class="app-context-banner">
+    <div class="govuk-width-container">
+      {{ govukBreadcrumbs({
+        items: [
+          { text: "England", href: "/" },
+          { text: area.name, href: "/area/{{ area.id }}" }
+        ]
+      }) }}
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
@@ -63,12 +70,12 @@ area: area
     <h2 class="govuk-heading-m">All flood target areas</h2>
     <ul class="govuk-list">
       <li>
-        <a href="/area/{{ area.id }}/target-areas?ta-type=warning" class="govuk-link--no-visited-state">
+        <a href="/area/{{ area.id }}/target-areas?type=fwa" class="govuk-link--no-visited-state">
           {{ fwaCount }} flood warning target areas
         </a>
       </li>
       <li>
-        <a href="/area/{{ area.id }}/target-areas?ta-type=alert" class="govuk-link--no-visited-state">
+        <a href="/area/{{ area.id }}/target-areas?type=faa" class="govuk-link--no-visited-state">
           {{ faaCount }} flood alert target areas
         </a>
       </li>

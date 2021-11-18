@@ -1,0 +1,7 @@
+{% macro targetAreaTypeTag(type) %}
+  {% if type == "faa" %}
+    <strong class="govuk-tag govuk-tag--blue">alert</strong>
+  {% elif type == "fwa" %}
+    <strong class="govuk-tag govuk-tag--yellow">warning</strong>
+  {% endif %}
+{% endmacro %}

@@ -137,6 +137,19 @@ a.app-link-destructive {
 	* {
 		color: white !important;
 	}
+
+	.govuk-breadcrumbs {
+		margin-top: 10px;
+		margin-bottom: 5px;
+	}
+
+	.govuk-breadcrumbs__list-item:first-child {
+		font-weight: bold;
+	}
+
+	.govuk-breadcrumbs__list-item:before {
+		border-color: white;
+	}
 }
 
 .app-email-preview-context {

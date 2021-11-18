@@ -31,16 +31,6 @@ module.exports = {
 
             navigation.push(
               {
-                href: '/',
-                text: 'Alerts',
-                active: request.path === '/'
-              },
-              {
-                href: '/choose-alert-template',
-                text: 'Create alert',
-                active: request.path === '/choose-alert-template'
-              },
-              {
                 href: '/account',
                 text: 'Account',
                 active: request.path === '/account'

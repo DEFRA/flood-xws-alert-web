@@ -1,10 +1,10 @@
 [
   {
-    "ref": "faa",
+    "id": "faa",
     "name": "Flood alert area"
   },
   {
-    "ref": "fwa",
+    "id": "fwa",
     "name": "Flood warning area"
   }
 ]

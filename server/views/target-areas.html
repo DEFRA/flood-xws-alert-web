@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block contextBanner %}
+  <div class="app-context-banner">
+    <div class="govuk-width-container">
+      {{ govukBreadcrumbs({
+        items: [
+          { text: "England", href: "/" },
+          { text: area.name, href: "/area/" + area.id },
+          { text: targetAreaType.name + 's' }
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      {{ targetAreaType.name }}s in {{ area.name }}
+    </h1>
+  </div>
+</div>
+
+<div class='govuk-grid-row'>
+  <div class="govuk-grid-column-two-thirds">
+    <div class="app-target-area-list">
+      <!-- <pre>{{ alerts | dump | safe }}</pre>
+      {{ targetAreasList.length }}
+      <pre>{{ area | dump(2) | safe }}</pre> -->
+      <ul class="govuk-list">
+        {% for ta in targetAreasList %}
+          <li class="app-target-area-summary govuk-!-margin-bottom-4 {{ 'app-target-area-in-force' if ta.alert }}">
+            <div class="app-target-area-header govuk-!-margin-bottom-2">
+              <span>
+                <a href="/target-area/{{ ta.code }}" class="govuk-link--no-visited-state">{{ ta.code }}</a>
+              </span>
+              <span>{{ areaCategoryTag(ta.category) }}</span>
+            </div>
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ ta.name }}</h3>
+            <p>{{ ta.description }}</p>
+            <!-- <p><b>Catchment:</b>Irish Sea</p> -->
+            {% if ta.alert %}
+              <span class="app-in-force-label">{{ ta.alert.typeName }} in force</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

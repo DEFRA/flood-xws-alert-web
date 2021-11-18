@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk')
 const config = require('../config')
+const { alertTypesMap } = require('./data')
 const ddb = new AWS.DynamoDB.DocumentClient()
 const tableName = config.dynamodbTableName
 
@@ -27,7 +28,39 @@ async function getAlerts (areaId) {
     TableName: tableName
   }).promise()
 
-  return result.Items
+  return result.Items.map(formatAlert)
+}
+
+async function getAlert (areaId, code, withData = true) {
+  const result = await ddb.get({
+    Key: {
+      pk: `AREA#${areaId}`,
+      sk: `ALERT#${code}`
+    },
+    TableName: tableName
+  }).promise()
+
+  if (!result.Item) {
+    return
+  }
+
+  const alert = formatAlert(result.Item)
+
+  if (withData) {
+    const dataResult = await ddb.get({
+      Key: {
+        pk: 'ALERTDATA',
+        sk: code
+      },
+      TableName: tableName
+    }).promise()
+
+    const alertData = dataResult.Item
+    alert.headline = alertData.headline
+    alert.body = alertData.body
+  }
+
+  return alert
 }
 
 async function getAreaCounts (areaId) {
@@ -60,6 +93,16 @@ function formatCounts (counts, areaId) {
       }
 }
 
+function formatAlert (alert) {
+  return {
+    code: alert.sk.substring(6),
+    updated: alert.updated,
+    areaId: alert.pk.substring(5),
+    type: alert.type,
+    typeName: alertTypesMap.get(alert.type).name
+  }
+}
+
 function findCount (counts, areaId) {
   return formatCounts(counts.find(item => item.areaId === areaId), areaId)
 }
@@ -89,5 +132,6 @@ module.exports = {
   getAreaCounts,
   getAlerts,
   findCount,
-  upsertUser
+  upsertUser,
+  getAlert
 }

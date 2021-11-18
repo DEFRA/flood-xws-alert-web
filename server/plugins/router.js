@@ -2,6 +2,8 @@ const routes = [].concat(
   require('../routes/auth'),
   require('../routes/home'),
   require('../routes/area'),
+  require('../routes/target-area'),
+  require('../routes/target-areas'),
   require('../routes/account'),
   // require('../routes/alerts'),
   // require('../routes/alert'),
