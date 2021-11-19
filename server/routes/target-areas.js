@@ -3,7 +3,7 @@ const { getAlerts } = require('../lib/ddb')
 const { sortBy } = require('../lib/helpers')
 const { areasMap, targetAreaTypesMap, targetAreas } = require('../lib/data')
 
-const filter = (areaId, type) => ta => ta.area.id === areaId && ta.type === type
+const filter = (areaId, type) => ta => ta.area.id === areaId && ta.type.id === type
 const mapper = alerts => ta => {
   const alert = alerts.find(a => a.code === ta.code)
   ta.alert = alert

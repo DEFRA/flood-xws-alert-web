@@ -98,8 +98,7 @@ function formatAlert (alert) {
     code: alert.sk.substring(6),
     updated: alert.updated,
     areaId: alert.pk.substring(5),
-    type: alert.type,
-    typeName: alertTypesMap.get(alert.type).name
+    type: alertTypesMap.get(alert.type)
   }
 }
 
@@ -127,11 +126,63 @@ async function upsertUser (userId, firstName, lastName, email) {
   return item
 }
 
+async function issueAlert (areaId, code, type, attributes) {
+  // Insert the alert, alert data and update
+  // the area counts in a single transaction
+  // TODO: add ddb ensure_not_exists constraints
+  const params = {
+    TransactItems: [
+      {
+        Put: {
+          TableName: tableName,
+          Item: {
+            pk: `AREA#${areaId}`,
+            sk: `ALERT#${code}`,
+            type: type,
+            updated: Date.now()
+          }
+        }
+      },
+      {
+        Put: {
+          TableName: tableName,
+          Item: {
+            pk: 'ALERTDATA',
+            sk: code,
+            ...attributes
+          }
+        }
+      },
+      {
+        Update: {
+          TableName: tableName,
+          Key: {
+            pk: 'COUNTS',
+            sk: `AREA#${areaId}`
+          },
+          UpdateExpression: 'ADD #counter :incr',
+          ExpressionAttributeNames: {
+            '#counter': type
+          },
+          ExpressionAttributeValues: {
+            ':incr': 1
+          }
+        }
+      }
+    ]
+  }
+
+  const result = await ddb.transactWrite(params).promise()
+
+  return result
+}
+
 module.exports = {
   getAllCounts,
   getAreaCounts,
   getAlerts,
   findCount,
   upsertUser,
-  getAlert
+  getAlert,
+  issueAlert
 }

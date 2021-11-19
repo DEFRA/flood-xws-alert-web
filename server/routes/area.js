@@ -27,7 +27,7 @@ module.exports = [
             html: `<a href='/target-area/${alertCode}'>${alertCode}</a>
             <br/><span class="app-table-area-name">${targetArea.name}</span>`
           },
-          { html: alertTypeTag(a.type) },
+          { html: alertTypeTag(a.type.id) },
           { text: date(a.updated).format(DATE_FORMAT) }
         ]
       })

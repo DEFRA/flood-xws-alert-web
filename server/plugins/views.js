@@ -2,8 +2,9 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const pkg = require('../../package.json')
-const { alertTypeTag } = require('../lib/filters')
+const { date, alertTypeTag, areaCategoryTag, targetAreaTypeTag } = require('../lib/filters')
 const serviceName = 'Manage flood alerts'
+const { markSafe } = require('nunjucks/src/runtime')
 
 module.exports = {
   plugin: require('@hapi/vision'),
@@ -26,10 +27,12 @@ module.exports = {
             watch: false
           })
 
-          // Register filters
-          env.addFilter('alert_type_tag', type => {
-            return alertTypeTag(type)
-          })
+          // Register globals/filters
+          env.addGlobal('alertTypeTag', markSafe(alertTypeTag))
+          env.addGlobal('areaCategoryTag', markSafe(areaCategoryTag))
+          env.addGlobal('targetAreaTypeTag', markSafe(targetAreaTypeTag))
+
+          env.addFilter('date', date)
 
           return next()
         }
@@ -42,8 +45,7 @@ module.exports = {
       appVersion: pkg.version,
       assetPath: '/assets',
       serviceName: serviceName,
-      pageTitle: `${serviceName}`,
-      alertTypeTag
+      pageTitle: `${serviceName}`
     }
   }
 }

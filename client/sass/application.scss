@@ -38,6 +38,9 @@ $govuk-assets-path: '/govuk/assets/';
 	}
 }
 
+.pull-right {
+  float: right;
+}
 
 // Remove header logo
 .govuk-header__logo {

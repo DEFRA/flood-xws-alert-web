@@ -1,6 +1,6 @@
 {% extends "form.html" %}
 
-{% set formSubmitButtonText = "Send for approval" %}
+{% set formSubmitButtonText = "Continue" %}
 
 {% block styles %}
   <link rel="stylesheet" href="{{ assetPath }}/vendor/autocomplete/accessible-autocomplete.min.css">
@@ -8,49 +8,29 @@
   <link rel="stylesheet" href="{{ assetPath }}/css/map.css" type="text/css">
 {% endblock %}
 
+{% block contextBanner %}
+  <div class="app-context-banner">
+    <div class="govuk-width-container">
+      {{ govukBreadcrumbs({
+        items: [
+          { text: "England", href: "/" },
+          { text: area.name, href: "/area/" + area.id },
+          { text: targetArea.name, href: "/target-area/" + targetArea.code },
+          { text: "Issue a flood " + ("warning" if targetArea.isWarningArea else "alert") }
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}
+
 {% block beforeForm %}
-  <h1 class="govuk-heading-l">Create an alert</h1>
+  <h1 class="govuk-heading-l">Issue a flood {{ "warning" if targetArea.isWarningArea else "alert" }}</h1>
 {% endblock %}
 
 {% block form %}
-  {{
-    govukSelect({
-      id: "areaCode",
-      name: "areaCode",
-      label: {
-        text: "Area"
-      },
-      value: data.areaCode,
-      errorMessage: errors.areaCode,
-      items: data.items
-    }) 
-  }}
-  {{
-    govukCharacterCount({
-      id: "headline",
-      name: "headline",
-      label: {
-        text: "Headline"
-      },
-      rows: 2,
-      maxlength: MAX_MESSAGE_HEADLINE_LENGTH,
-      value: data.headline,
-      errorMessage: errors.headline
-    }) 
-  }}
-  {{
-    govukCharacterCount({
-      id: "body",
-      name: "body",
-      label: {
-        text: "Body"
-      },
-      rows: 12,
-      maxlength: MAX_MESSAGE_BODY_LENGTH,
-      value: data.body,
-      errorMessage: errors.body
-    }) 
-  }}
+  {{ govukRadios(fields.type) }}
+  {{ govukCharacterCount(fields.headline) }}
+  {{ govukCharacterCount(fields.body) }}
 {% endblock %}
 
 {% block oneThird %}
@@ -75,20 +55,20 @@
     //   }
     // }
 
-    accessibleAutocomplete.enhanceSelectElement({
-      autoselect: true,
-      confirmOnBlur: false,
-      defaultValue: '',
-      minLength: 3,
-      displayMenu: 'overlay',
-      selectElement: selectEl,
-      // onConfirm: () => {
-      //   window.XWS.map('', 'map')
-      // }
-    })
+    // accessibleAutocomplete.enhanceSelectElement({
+    //   autoselect: true,
+    //   confirmOnBlur: false,
+    //   defaultValue: '',
+    //   minLength: 3,
+    //   displayMenu: 'overlay',
+    //   selectElement: selectEl,
+    //   // onConfirm: () => {
+    //   //   window.XWS.map('', 'map')
+    //   // }
+    // })
   </script>
 
   <script src="{{ assetPath }}/vendor/ol/proj4-2.5.0.js"></script>
   <script src="{{ assetPath }}/vendor/ol/ol.js"></script>
-  <script src="{{ assetPath }}/js/map.js"></script>
+  <!-- <script src="{{ assetPath }}/js/map.js"></script> -->
 {% endblock %}

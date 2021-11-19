@@ -37,8 +37,7 @@ const targetAreas = targetAreasData
       quickDialNumber: ta.quickdial,
       riverOrSea: ta.riverOrSea,
       category: ta.areatype,
-      type: type,
-      typeName: targetAreaTypesMap.get(type).name,
+      type: targetAreaTypesMap.get(type),
       isWarningArea: type === 'fwa'
     }
   })
