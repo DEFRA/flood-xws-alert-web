@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk')
+const { v4: uuid } = require('uuid')
 const config = require('../config')
 const { alertTypesMap } = require('./data')
 const ddb = new AWS.DynamoDB.DocumentClient()
@@ -8,22 +9,20 @@ async function getAllCounts () {
   const result = await ddb.query({
     KeyConditionExpression: 'pk = :pk',
     ExpressionAttributeValues: {
-      ':pk': 'COUNTS'
+      ':pk': 'C'
     },
     TableName: tableName
   }).promise()
 
-  return result.Items.map(item => formatCounts(item, item.sk.substr(5)))
+  return result.Items.map(item => formatCounts(item, item.sk.split('#').pop()))
 }
 
 async function getAlerts (areaId) {
-  // TODO: In theory, alertSummaries could be paginated.
-  // Consider other storage approaches (use StringSet/Map?) or paginate here.
   const result = await ddb.query({
     KeyConditionExpression: 'pk = :pk and begins_with(sk, :sk)',
     ExpressionAttributeValues: {
-      ':pk': `AREA#${areaId}`,
-      ':sk': 'ALERT#'
+      ':pk': 'A',
+      ':sk': `AR#${areaId}`
     },
     TableName: tableName
   }).promise()
@@ -34,8 +33,8 @@ async function getAlerts (areaId) {
 async function getAlert (areaId, code, withData = true) {
   const result = await ddb.get({
     Key: {
-      pk: `AREA#${areaId}`,
-      sk: `ALERT#${code}`
+      pk: 'A',
+      sk: `AR#${areaId}#TA#${code}`
     },
     TableName: tableName
   }).promise()
@@ -49,8 +48,8 @@ async function getAlert (areaId, code, withData = true) {
   if (withData) {
     const dataResult = await ddb.get({
       Key: {
-        pk: 'ALERTDATA',
-        sk: code
+        pk: 'AD',
+        sk: alert.id
       },
       TableName: tableName
     }).promise()
@@ -66,8 +65,8 @@ async function getAlert (areaId, code, withData = true) {
 async function getAreaCounts (areaId) {
   const result = await ddb.get({
     Key: {
-      pk: 'COUNTS',
-      sk: `AREA#${areaId}`
+      pk: 'C',
+      sk: `AR#${areaId}`
     },
     TableName: tableName
   }).promise()
@@ -94,10 +93,13 @@ function formatCounts (counts, areaId) {
 }
 
 function formatAlert (alert) {
+  const split = alert.sk.split('#')
+
   return {
-    code: alert.sk.substring(6),
+    id: alert.id,
+    code: split[3],
     updated: alert.updated,
-    areaId: alert.pk.substring(5),
+    areaId: split[1],
     type: alertTypesMap.get(alert.type)
   }
 }
@@ -108,7 +110,7 @@ function findCount (counts, areaId) {
 
 async function upsertUser (userId, firstName, lastName, email) {
   const item = {
-    pk: 'USER',
+    pk: 'U',
     sk: userId,
     first_name: firstName,
     last_name: lastName,
@@ -130,16 +132,19 @@ async function issueAlert (areaId, code, type, attributes) {
   // Insert the alert, alert data and update
   // the area counts in a single transaction
   // TODO: add ddb ensure_not_exists constraints
+  const id = uuid()
+  const updated = Date.now()
   const params = {
     TransactItems: [
       {
         Put: {
           TableName: tableName,
           Item: {
-            pk: `AREA#${areaId}`,
-            sk: `ALERT#${code}`,
-            type: type,
-            updated: Date.now()
+            pk: 'A',
+            sk: `AR#${areaId}#TA#${code}`,
+            id,
+            type,
+            updated
           }
         }
       },
@@ -147,8 +152,8 @@ async function issueAlert (areaId, code, type, attributes) {
         Put: {
           TableName: tableName,
           Item: {
-            pk: 'ALERTDATA',
-            sk: code,
+            pk: 'AD',
+            sk: id,
             ...attributes
           }
         }
@@ -157,8 +162,8 @@ async function issueAlert (areaId, code, type, attributes) {
         Update: {
           TableName: tableName,
           Key: {
-            pk: 'COUNTS',
-            sk: `AREA#${areaId}`
+            pk: 'C',
+            sk: `AR#${areaId}`
           },
           UpdateExpression: 'ADD #counter :incr',
           ExpressionAttributeNames: {
