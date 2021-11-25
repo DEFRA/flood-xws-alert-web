@@ -22,7 +22,7 @@ async function getAlerts (areaId) {
     KeyConditionExpression: 'pk = :pk and begins_with(sk, :sk)',
     ExpressionAttributeValues: {
       ':pk': 'A',
-      ':sk': `AR#${areaId}`
+      ':sk': `AR#${areaId}#`
     },
     TableName: tableName
   }).promise()
