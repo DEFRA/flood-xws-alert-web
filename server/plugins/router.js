@@ -6,9 +6,6 @@ const routes = [].concat(
   require('../routes/target-areas'),
   require('../routes/account'),
   require('../routes/issue'),
-  // require('../routes/update'),
-  // require('../routes/confirm-delete'),
-  // require('../routes/confirm-approve'),
   require('../routes/status'),
   require('../routes/public')
 )

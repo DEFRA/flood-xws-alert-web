@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk')
 const { Alert } = require('caplib')
 const date = require('./date')
-const { getArea, getService, getPublisher } = require('../lib/db')
 const { bucketName } = require('../config')
 
 /**
@@ -67,21 +66,6 @@ function addStylesheet (href, xml) {
   return xml.substring(0, insertIdx) + instruction + xml.substring(insertIdx)
 }
 
-/**
- * Issue an alert
- *
- * @param {object} alert - The alert to issue
- */
-async function issueAlert (alert) {
-  const areaCode = alert.area_code
-  const area = await getArea(areaCode)
-  const service = await getService(alert.service_id)
-  const publisher = await getPublisher(service.publisher_id)
-  const capAlert = buildCapAlert(alert, area, service, publisher)
-
-  return saveToS3(`alerts/${alert.id}.xml`, capAlert)
-}
-
 async function saveToS3 (key, body) {
   const s3bucket = new AWS.S3()
 
@@ -97,4 +81,4 @@ async function saveToS3 (key, body) {
   return putObjectResult
 }
 
-module.exports = { issueAlert }
+module.exports = { saveToS3, buildCapAlert }

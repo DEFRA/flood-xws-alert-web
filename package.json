@@ -32,7 +32,6 @@
     "blipp": "4.0.2",
     "caplib": "github:NeXt-Warning-System/caplib",
     "common": "github:NeXt-Warning-System/common",
-    "core": "github:NeXt-Warning-System/core",
     "dayjs": "1.10.7",
     "dotenv": "10.0.0",
     "govuk-frontend": "3.14.0",
@@ -40,7 +39,6 @@
     "joi": "17.4.2",
     "jquery": "^3.6.0",
     "nunjucks": "3.2.3",
-    "pg": "^8.7.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

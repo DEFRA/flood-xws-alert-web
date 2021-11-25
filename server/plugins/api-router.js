@@ -1,6 +1,4 @@
-const routes = [].concat(
-  require('../routes/api/area')
-)
+const routes = []
 
 module.exports = {
   plugin: {
