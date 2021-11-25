@@ -39,7 +39,7 @@ module.exports = [
       const targetArea = targetAreasMap.get(code)
       const areaId = targetArea.area.id
       const { credentials } = request.auth
-      const userId = credentials.user.sk
+      const userId = credentials.user.id
       const type = payload.type
 
       try {

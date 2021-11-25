@@ -19,7 +19,10 @@
     {% endblock %}
 
     {% block button %}
-      {{ govukButton({ text: formSubmitButtonText | default("Continue") }) }}
+      {{ govukButton({
+        text: formSubmitButtonText | default("Continue"),
+        preventDoubleClick: true
+      }) }}
     {% endblock %}
   </form>
 

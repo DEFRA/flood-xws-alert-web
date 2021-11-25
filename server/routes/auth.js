@@ -1,6 +1,6 @@
 const boom = require('@hapi/boom')
 const config = require('../config')
-const { upsertUser } = require('../lib/ddb')
+// const { upsertUser } = require('../lib/ddb')
 const { permissions } = require('../permissions')
 
 function getPermissions (roles) {
@@ -42,7 +42,14 @@ module.exports = [
         return boom.forbidden('Insufficient permissions')
       }
 
-      const user = await upsertUser(id, firstName, lastName, email)
+      const user = {
+        id: id,
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        last_login: Date.now()
+      }
+      // const user = await upsertUser(id, firstName, lastName, email)
 
       // if (!user.active) {
       //   return boom.forbidden('Insufficient permissions')

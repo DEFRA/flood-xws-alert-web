@@ -108,30 +108,27 @@ function findCount (counts, areaId) {
   return formatCounts(counts.find(item => item.areaId === areaId), areaId)
 }
 
-async function upsertUser (userId, firstName, lastName, email) {
-  const item = {
-    pk: 'U',
-    sk: userId,
-    first_name: firstName,
-    last_name: lastName,
-    email: email,
-    last_login: Date.now()
-  }
+// async function upsertUser (userId, firstName, lastName, email) {
+//   const item = {
+//     pk: 'U',
+//     sk: userId,
+//     first_name: firstName,
+//     last_name: lastName,
+//     email: email,
+//     last_login: Date.now()
+//   }
 
-  const params = {
-    Item: item,
-    TableName: tableName
-  }
+//   const params = {
+//     Item: item,
+//     TableName: tableName
+//   }
 
-  await ddb.put(params).promise()
+//   await ddb.put(params).promise()
 
-  return item
-}
+//   return item
+// }
 
 async function issueAlert (areaId, code, type, attributes) {
-  // Insert the alert, alert data and update
-  // the area counts in a single transaction
-  // TODO: add ddb ensure_not_exists constraints
   const id = uuid()
   const updated = Date.now()
   const params = {
@@ -145,7 +142,8 @@ async function issueAlert (areaId, code, type, attributes) {
             id,
             type,
             updated
-          }
+          },
+          ConditionExpression: 'attribute_not_exists(sk)'
         }
       },
       {
@@ -155,7 +153,8 @@ async function issueAlert (areaId, code, type, attributes) {
             pk: 'AD',
             sk: id,
             ...attributes
-          }
+          },
+          ConditionExpression: 'attribute_not_exists(sk)'
         }
       },
       {
@@ -187,7 +186,7 @@ module.exports = {
   getAreaCounts,
   getAlerts,
   findCount,
-  upsertUser,
+  // upsertUser,
   getAlert,
   issueAlert
 }
