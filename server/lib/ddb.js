@@ -30,7 +30,7 @@ async function getAlerts (areaId) {
   return result.Items.map(formatAlert)
 }
 
-async function getAlert (areaId, code, withData = true) {
+async function getAlert (areaId, code, includeData = true) {
   const result = await ddb.get({
     Key: {
       pk: 'A',
@@ -45,7 +45,7 @@ async function getAlert (areaId, code, withData = true) {
 
   const alert = formatAlert(result.Item)
 
-  if (withData) {
+  if (includeData) {
     const dataResult = await ddb.get({
       Key: {
         pk: 'AD',
