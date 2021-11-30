@@ -15,6 +15,15 @@ async function getAllCounts () {
   }).promise()
 
   return result.Items.map(item => formatCounts(item, item.sk.split('#').pop()))
+
+  // const alerts = result.Items.map(item => {
+  //   const [, areaId, , code] = item.sk.split('#')
+  //   return {
+  //     ...item,
+  //     areaId,
+  //     code
+  //   }
+  // })
 }
 
 async function getAlerts (areaId) {
@@ -137,11 +146,12 @@ async function issueAlert (areaId, code, type, attributes) {
         Put: {
           TableName: tableName,
           Item: {
-            pk: 'A',
-            sk: `AR#${areaId}#TA#${code}`,
-            id,
-            type,
-            updated
+            pk: 'AD',
+            sk: id,
+            areaId,
+            code,
+            updated,
+            ...attributes
           },
           ConditionExpression: 'attribute_not_exists(sk)'
         }
@@ -150,9 +160,11 @@ async function issueAlert (areaId, code, type, attributes) {
         Put: {
           TableName: tableName,
           Item: {
-            pk: 'AD',
-            sk: id,
-            ...attributes
+            pk: 'A',
+            sk: `AR#${areaId}#TA#${code}`,
+            id,
+            type,
+            updated
           },
           ConditionExpression: 'attribute_not_exists(sk)'
         }
