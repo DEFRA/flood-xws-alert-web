@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:14-alpine
 
 # Need to add bash so sass build can happen 
 # Need to add git as package.json has some github refs
