@@ -31,7 +31,6 @@
     "aws-sdk": "2.1048.0",
     "blipp": "4.0.2",
     "common": "github:DEFRA/flood-xws-common",
-    "dayjs": "1.10.7",
     "dotenv": "10.0.0",
     "govuk-frontend": "4.0.0",
     "hapi-pino": "9.1.0",

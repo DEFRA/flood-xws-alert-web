@@ -1,4 +1,4 @@
-const dayjs = require('dayjs')
+const dayjs = require('common/date')
 const { DATE_FORMAT } = require('common/constants')
 
 function alertTypeTag (type) {
