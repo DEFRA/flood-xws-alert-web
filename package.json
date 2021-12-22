@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "XWS Alert Web - the alert managment application",
   "engines": {
-    "node": "12"
+    "node": "14"
   },
   "main": "index.js",
   "scripts": {
