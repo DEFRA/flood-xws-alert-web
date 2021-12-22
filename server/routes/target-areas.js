@@ -1,7 +1,7 @@
 const joi = require('joi')
 const { getAlerts } = require('../lib/ddb')
-const { sortBy } = require('../lib/helpers')
-const { areasMap, targetAreaTypesMap, targetAreas } = require('../lib/data')
+const { sortBy } = require('common/helpers')
+const { areasMap, targetAreaTypesMap, targetAreas } = require('common/data')
 
 const filter = (areaId, type) => ta => ta.area.id === areaId && ta.type.id === type
 const mapper = alerts => ta => {

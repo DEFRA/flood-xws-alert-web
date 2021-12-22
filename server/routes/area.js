@@ -1,8 +1,8 @@
 const joi = require('joi')
-const { areasMap, getTargetAreas } = require('../lib/data')
+const date = require('common/date')
+const { DATE_FORMAT } = require('common/constants')
+const { areasMap, getTargetAreas } = require('common/data')
 const { getAreaCounts, getAlerts } = require('../lib/ddb')
-const date = require('../lib/date')
-const { DATE_FORMAT } = require('../lib/constants')
 const { alertTypeTag } = require('../lib/filters')
 
 module.exports = [

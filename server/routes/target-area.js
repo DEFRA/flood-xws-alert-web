@@ -1,6 +1,6 @@
 const joi = require('joi')
 const { getAlert } = require('../lib/ddb')
-const { targetAreasMap } = require('../lib/data')
+const { targetAreasMap } = require('common/data')
 
 module.exports = [
   {

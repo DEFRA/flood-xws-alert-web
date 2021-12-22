@@ -1,4 +1,4 @@
-const { regionsMap, groupedAreas } = require('../lib/data')
+const { regionsMap, groupedAreas } = require('common/data')
 const { getAllCounts, findCount } = require('../lib/ddb')
 
 function sum (counts, type) {

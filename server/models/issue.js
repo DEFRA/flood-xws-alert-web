@@ -1,6 +1,6 @@
 const joi = require('joi')
-const { BaseViewModel, baseMessages } = require('./form')
-const { alertTypes, alertTypesMap } = require('../lib/data')
+const { alertTypes, alertTypesMap } = require('common/data')
+const { BaseViewModel, baseMessages } = require('common/view/form')
 
 const {
   MAX_MESSAGE_HEADLINE_LENGTH,

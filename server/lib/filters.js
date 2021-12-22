@@ -1,5 +1,5 @@
 const dayjs = require('dayjs')
-const { DATE_FORMAT } = require('../lib/constants')
+const { DATE_FORMAT } = require('common/constants')
 
 function alertTypeTag (type) {
   switch (type) {

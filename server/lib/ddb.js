@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const { v4: uuid } = require('uuid')
 const config = require('../config')
-const { alertTypesMap } = require('./data')
+const { alertTypesMap } = require('common/data')
 const ddb = new AWS.DynamoDB.DocumentClient()
 const tableName = config.dynamodbTableName
 
