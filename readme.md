@@ -18,11 +18,11 @@ Internal facing website for issuing alerts
 | HOME_PAGE               |                                | yes        |                               |
 | DYNAMODB_TABLE_NAME     | DynamoDB table name            | yes        |                               |
 
-As per [12 Factor principles](https://12factor.net/config) application config is stored in environment variables (env vars). For ease of local development the service should have a `.env` file in its root folder. Starter `.env` files for local development for this service are held in the [https://github.com/NeXt-Warning-System/config/alert-web]() repository.
+As per [12 Factor principles](https://12factor.net/config) application config is stored in environment variables (env vars). For ease of local development the service should have a `.env` file in its root folder. Starter `.env` files for local development for this service are held in the [xws config repo](https://github.com/DEFRA/flood-xws-config/tree/master/flood-xws-alert-web) repository.
 
 # Prerequisites
 
-* [Node v12+](https://nodejs.org/en/download/)
+* [Node v14+](https://nodejs.org/en/download/)
 
 # Running the service
 
