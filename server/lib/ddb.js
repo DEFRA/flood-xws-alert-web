@@ -1,29 +1,20 @@
 const AWS = require('aws-sdk')
 const { v4: uuid } = require('uuid')
 const config = require('../config')
-const { alertTypesMap } = require('common/data')
+const { alertTypesMap, areasMap, regionsMap } = require('common/data')
 const ddb = new AWS.DynamoDB.DocumentClient()
 const tableName = config.dynamodbTableName
 
-async function getAllCounts () {
+async function getAllAlerts () {
   const result = await ddb.query({
     KeyConditionExpression: 'pk = :pk',
     ExpressionAttributeValues: {
-      ':pk': 'C'
+      ':pk': 'A'
     },
     TableName: tableName
   }).promise()
 
-  return result.Items.map(item => formatCounts(item, item.sk.split('#').pop()))
-
-  // const alerts = result.Items.map(item => {
-  //   const [, areaId, , code] = item.sk.split('#')
-  //   return {
-  //     ...item,
-  //     areaId,
-  //     code
-  //   }
-  // })
+  return result.Items.map(formatAlert)
 }
 
 async function getAlerts (areaId) {
@@ -71,50 +62,21 @@ async function getAlert (areaId, code, includeData = true) {
   return alert
 }
 
-async function getAreaCounts (areaId) {
-  const result = await ddb.get({
-    Key: {
-      pk: 'C',
-      sk: `AR#${areaId}`
-    },
-    TableName: tableName
-  }).promise()
-
-  return formatCounts(result.Item, areaId)
-}
-
-function formatCounts (counts, areaId) {
-  return !counts
-    ? {
-        areaId,
-        fa: 0,
-        fw: 0,
-        sfw: 0,
-        wnlif: 0
-      }
-    : {
-        areaId,
-        fa: counts.fa ?? 0,
-        fw: counts.fw ?? 0,
-        sfw: counts.sfw ?? 0,
-        wnlif: counts.wnlif ?? 0
-      }
-}
-
 function formatAlert (alert) {
   const split = alert.sk.split('#')
+  const areaId = split[1]
+  const area = areasMap.get(areaId)
+  const regionId = area.regionId
+  const region = regionsMap.get(regionId)
 
   return {
     id: alert.id,
     code: split[3],
     updated: alert.updated,
-    areaId: split[1],
+    area,
+    region,
     type: alertTypesMap.get(alert.type)
   }
-}
-
-function findCount (counts, areaId) {
-  return formatCounts(counts.find(item => item.areaId === areaId), areaId)
 }
 
 // async function upsertUser (userId, firstName, lastName, email) {
@@ -168,23 +130,24 @@ async function issueAlert (areaId, code, type, attributes) {
           },
           ConditionExpression: 'attribute_not_exists(sk)'
         }
-      },
-      {
-        Update: {
-          TableName: tableName,
-          Key: {
-            pk: 'C',
-            sk: `AR#${areaId}`
-          },
-          UpdateExpression: 'ADD #counter :incr',
-          ExpressionAttributeNames: {
-            '#counter': type
-          },
-          ExpressionAttributeValues: {
-            ':incr': 1
-          }
-        }
       }
+      // ,
+      // {
+      //   Update: {
+      //     TableName: tableName,
+      //     Key: {
+      //       pk: 'C',
+      //       sk: `AR#${areaId}`
+      //     },
+      //     UpdateExpression: 'ADD #counter :incr',
+      //     ExpressionAttributeNames: {
+      //       '#counter': type
+      //     },
+      //     ExpressionAttributeValues: {
+      //       ':incr': 1
+      //     }
+      //   }
+      // }
     ]
   }
 
@@ -194,10 +157,8 @@ async function issueAlert (areaId, code, type, attributes) {
 }
 
 module.exports = {
-  getAllCounts,
-  getAreaCounts,
+  getAllAlerts,
   getAlerts,
-  findCount,
   // upsertUser,
   getAlert,
   issueAlert

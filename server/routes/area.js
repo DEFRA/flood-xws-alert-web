@@ -1,8 +1,8 @@
 const joi = require('joi')
 const date = require('common/date')
 const { DATE_FORMAT } = require('common/constants')
-const { areasMap, getTargetAreas } = require('common/data')
-const { getAreaCounts, getAlerts } = require('../lib/ddb')
+const { areasMap, getTargetAreas, countAlertsType: count } = require('common/data')
+const { getAlerts } = require('../lib/ddb')
 const { alertTypeTag } = require('../lib/filters')
 
 module.exports = [
@@ -12,7 +12,6 @@ module.exports = [
     handler: async (request, h) => {
       const areaId = request.params.areaId
       const area = areasMap.get(areaId)
-      const areaCounts = await getAreaCounts(areaId)
       const alerts = await getAlerts(areaId)
       const targetAreas = getTargetAreas(areaId)
       const alertAreas = targetAreas.filter(a => !a.isWarningArea)
@@ -35,9 +34,9 @@ module.exports = [
       return h.view('area', {
         area,
         areaId,
-        faCount: areaCounts.fa,
-        fwCount: areaCounts.fw,
-        sfwCount: areaCounts.sfw,
+        faCount: count(alerts, 'fa'),
+        fwCount: count(alerts, 'fw'),
+        sfwCount: count(alerts, 'sfw'),
         faaCount: alertAreas.length,
         fwaCount: warningAreas.length,
         alertRows
