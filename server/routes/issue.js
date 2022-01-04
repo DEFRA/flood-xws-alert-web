@@ -1,7 +1,7 @@
 const joi = require('joi')
 const { schema, ViewModel } = require('../models/issue')
 const { issueAlert } = require('../lib/ddb')
-const { targetAreasMap } = require('common/data')
+const { targetAreasMap } = require('flood-xws-common/data')
 
 module.exports = [
   {

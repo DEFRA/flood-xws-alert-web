@@ -1,5 +1,5 @@
-const dayjs = require('common/date')
-const { DATE_FORMAT } = require('common/constants')
+const dayjs = require('flood-xws-common/date')
+const { DATE_FORMAT } = require('flood-xws-common/constants')
 
 function alertTypeTag (type) {
   switch (type) {

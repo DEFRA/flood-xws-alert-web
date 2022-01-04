@@ -1,6 +1,6 @@
 const joi = require('joi')
 const { getAlert } = require('../lib/ddb')
-const { targetAreasMap } = require('common/data')
+const { targetAreasMap } = require('flood-xws-common/data')
 
 module.exports = [
   {

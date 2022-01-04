@@ -1,11 +1,11 @@
 const joi = require('joi')
-const { alertTypes, alertTypesMap } = require('common/data')
-const { BaseViewModel, baseMessages } = require('common/view/form')
+const { alertTypes, alertTypesMap } = require('flood-xws-common/data')
+const { BaseViewModel, baseMessages } = require('flood-xws-common/form')
 
 const {
   MAX_MESSAGE_HEADLINE_LENGTH,
   MAX_MESSAGE_BODY_LENGTH
-} = require('common/constants')
+} = require('flood-xws-common/constants')
 
 const TYPE_KEY = 'type'
 const TYPE_LABEL = 'Type'

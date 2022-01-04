@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const { v4: uuid } = require('uuid')
 const config = require('../config')
-const { alertTypesMap, areasMap, regionsMap } = require('common/data')
+const { alertTypesMap, areasMap, regionsMap } = require('flood-xws-common/data')
 const ddb = new AWS.DynamoDB.DocumentClient()
 const tableName = config.dynamodbTableName
 

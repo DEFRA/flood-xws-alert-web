@@ -1,5 +1,5 @@
 const { getAllAlerts } = require('../lib/ddb')
-const { regionsMap, groupedAreas, countAlertsType: count } = require('common/data')
+const { regionsMap, groupedAreas, countAlertsType: count } = require('flood-xws-common/data')
 
 module.exports = [
   {
