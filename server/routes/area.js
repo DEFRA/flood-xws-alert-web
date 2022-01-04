@@ -1,7 +1,8 @@
 const joi = require('joi')
 const date = require('flood-xws-common/date')
 const { DATE_FORMAT } = require('flood-xws-common/constants')
-const { areasMap, getTargetAreas, countAlertsType: count } = require('flood-xws-common/data')
+const { areasMap, getTargetAreas } = require('flood-xws-common/data')
+const { countAlertTypes: count } = require('../helpers')
 const { getAlerts } = require('../lib/ddb')
 const { alertTypeTag } = require('../lib/filters')
 
