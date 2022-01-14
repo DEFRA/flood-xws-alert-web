@@ -12,7 +12,10 @@
     "build": "bin/build",
     "lint": "standard",
     "unit-test": "lab -c -r console -o stdout -r lcov -o lcov.info",
-    "test": "npm run lint && npm run unit-test"
+    "test": "npm run lint && npm run unit-test",
+    "deploy": "cf target -o defra-next-warning-system -s sandbox && cf push xws-alert-web-sandbox",
+    "deploy:sandbox": "cf login -a api.london.cloud.service.gov.uk -o defra-next-warning-system -s sandbox && cf push xws-alert-web-sandbox",
+    "deploy:test": "cf login -a api.london.cloud.service.gov.uk -o defra-next-warning-system -s test && cf push xws-alert-web-test"
   },
   "author": "DEFRA",
   "license": "OGL-UK-3.0",
