@@ -1,6 +1,6 @@
 require('dotenv').config()
 const joi = require('joi')
-const envs = ['sandbox', 'test', 'production']
+const envs = ['sandbox', 'development', 'test', 'production']
 
 // Define config schema
 const schema = joi.object().keys({
