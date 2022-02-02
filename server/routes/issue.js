@@ -1,4 +1,5 @@
 const joi = require('joi')
+const { Errors } = require('../models/form')
 const { schema, ViewModel } = require('../models/issue')
 const { issueAlert } = require('../lib/ddb')
 const { targetAreasMap } = require('flood-xws-common/data')
@@ -20,7 +21,7 @@ module.exports = [
         data.type = 'fa'
       }
 
-      return h.view('issue', new ViewModel(data, null, { area, targetArea }))
+      return h.view('issue', new ViewModel(data, undefined, { area, targetArea }))
     },
     options: {
       validate: {
@@ -61,7 +62,8 @@ module.exports = [
           const targetArea = targetAreasMap.get(code)
           const area = targetArea.area
 
-          return h.view('issue', new ViewModel(request.payload, err, { area, targetArea })).takeover()
+          const errors = Errors.fromJoi(err)
+          return h.view('issue', new ViewModel(request.payload, errors, { area, targetArea })).takeover()
         }
       }
     }

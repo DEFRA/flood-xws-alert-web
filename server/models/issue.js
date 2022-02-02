@@ -1,6 +1,6 @@
 const joi = require('joi')
 const { alertTypes, alertTypesMap } = require('flood-xws-common/data')
-const { BaseViewModel, baseMessages } = require('flood-xws-common/form')
+const { BaseViewModel, baseMessages } = require('./form')
 
 const {
   MAX_MESSAGE_HEADLINE_LENGTH,
@@ -18,14 +18,12 @@ const HEADLINE_LABEL = 'Headline'
 const HEADLINE_MESSAGES = {
   'string.empty': `Enter a message ${HEADLINE_LABEL.toLowerCase()}`
 }
-const HEADLINE_OPTIONS = { rows: 2, maxlength: MAX_MESSAGE_HEADLINE_LENGTH }
 
 const BODY_KEY = 'body'
 const BODY_LABEL = 'Body'
 const BODY_MESSAGES = {
   'string.empty': `Enter a message ${BODY_LABEL.toLowerCase()}`
 }
-const BODY_OPTIONS = { rows: 12, maxlength: MAX_MESSAGE_BODY_LENGTH }
 
 const schema = joi.object().keys({
   // TODO: alert type constraint could be tighter using conditional based on the ta type
@@ -62,9 +60,39 @@ class ViewModel extends BaseViewModel {
     }
 
     // Add the form fields
-    this.addField(TYPE_KEY, TYPE_LABEL, null, typeOptions)
-    this.addField(HEADLINE_KEY, HEADLINE_LABEL, null, HEADLINE_OPTIONS)
-    this.addField(BODY_KEY, BODY_LABEL, null, BODY_OPTIONS)
+    this.addField(TYPE_KEY, {
+      name: TYPE_KEY,
+      id: TYPE_KEY,
+      label: {
+        text: TYPE_LABEL
+      },
+      errorMessage: this.errors[TYPE_KEY],
+      ...typeOptions
+    })
+
+    this.addField(HEADLINE_KEY, {
+      name: HEADLINE_KEY,
+      id: HEADLINE_KEY,
+      label: {
+        text: HEADLINE_LABEL
+      },
+      rows: 2,
+      maxlength: MAX_MESSAGE_HEADLINE_LENGTH,
+      value: this.data[HEADLINE_KEY],
+      errorMessage: this.errors[HEADLINE_KEY]
+    })
+
+    this.addField(BODY_KEY, {
+      name: BODY_KEY,
+      id: BODY_KEY,
+      label: {
+        text: BODY_LABEL
+      },
+      rows: 12,
+      maxlength: MAX_MESSAGE_BODY_LENGTH,
+      value: this.data[BODY_KEY],
+      errorMessage: this.errors[BODY_KEY]
+    })
   }
 }
 
