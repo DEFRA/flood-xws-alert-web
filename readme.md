@@ -1,11 +1,11 @@
-# alert-web
+# flood-xws-alert-web
 
 Internal facing "Manage flood alerts" website for issuing alerts
 
 # Environment variables
 
 | name                    | description                    | required   | valid                         |
-| ----------              | ------------------             | :--------: | :---------------------------: |
+| --------------------:   | --------------------------:    | :--------: | :---------------------------: |
 | ENV                     | Deployment environment         | yes        | sandbox,test,production       |
 | HOST                    | Hostname                       | yes        |                               |
 | PORT                    | Port number                    | yes        |                               |
@@ -37,7 +37,7 @@ Now the application is ready to run:
 `$ node index.js`
 
 Check the server is running by pointing your browser to `http://localhost:3000`
-`
+
 ## License
 
 THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE found at:
