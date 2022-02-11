@@ -28,8 +28,8 @@ const BODY_MESSAGES = {
 const schema = joi.object().keys({
   // TODO: alert type constraint could be tighter using conditional based on the ta type
   [TYPE_KEY]: joi.string().valid(...alertTypes.map(item => item.id)).label(TYPE_LABEL).required().messages(TYPE_MESSAGES),
-  [HEADLINE_KEY]: joi.string().max(MAX_MESSAGE_HEADLINE_LENGTH).label(HEADLINE_LABEL).required().messages(HEADLINE_MESSAGES),
-  [BODY_KEY]: joi.string().max(MAX_MESSAGE_BODY_LENGTH).label(BODY_LABEL).required().messages(BODY_MESSAGES)
+  [HEADLINE_KEY]: joi.string().trim().max(MAX_MESSAGE_HEADLINE_LENGTH).label(HEADLINE_LABEL).required().messages(HEADLINE_MESSAGES),
+  [BODY_KEY]: joi.string().trim().max(MAX_MESSAGE_BODY_LENGTH).label(BODY_LABEL).required().messages(BODY_MESSAGES)
 }).messages(baseMessages).required()
 
 class ViewModel extends BaseViewModel {
