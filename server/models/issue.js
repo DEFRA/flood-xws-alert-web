@@ -36,11 +36,13 @@ class ViewModel extends BaseViewModel {
   constructor (data, err, extra) {
     super(data, err, {
       ...extra,
+      pageHeading: 'Issue',
       MAX_MESSAGE_HEADLINE_LENGTH,
       MAX_MESSAGE_BODY_LENGTH
     })
 
     const targetAreaType = this.targetArea.type
+
     // Hide the type control if there's only one option
     const attributes = targetAreaType.alertTypes.length === 1
       ? { hidden: true }
