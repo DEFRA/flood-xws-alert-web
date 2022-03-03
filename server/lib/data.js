@@ -6,6 +6,11 @@ const eaAreas = require('../data/ea-area.json')
 const eaOwners = require('../data/ea-owner.json')
 const targetAreaCategories = require('../data/target-area-category.json')
 
+// Fix up eaOwner names by removing the area prefix
+eaOwners.forEach(eaOwner => {
+  eaOwner.name = eaOwner.name.split(' - ').slice(-1)[0]
+})
+
 const groupedEAOwners = groupBy(eaOwners, 'ea_area_id')
 const eaAreasMap = new Map(eaAreas.map(area => [area.id, area]))
 const eaOwnersMap = new Map(eaOwners.map(owner => [owner.id, owner]))

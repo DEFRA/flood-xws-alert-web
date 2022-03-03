@@ -24,7 +24,7 @@
       {% endif %}
 
       <h1 class="govuk-heading-xl">
-        {{ targetArea.name }} flood {{ "warning" if c.is_warning_area else "alert" }} area
+        {{ targetArea.name }} flood {{ "warning" if targetArea.is_warning_area else "alert" }} area
       </h1>
     </div>
   </div>
