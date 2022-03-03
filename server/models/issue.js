@@ -1,6 +1,10 @@
 const joi = require('joi')
-const { alertTypes, alertTypesMap } = require('flood-xws-common/data')
+const { alertTypes, alertTypesMap } = require('../lib/data')
 const { BaseViewModel, baseMessages } = require('./form')
+const supportedAlertTypesMap = {
+  faa: ['fa'],
+  fwa: ['fw', 'sfw']
+}
 
 const {
   MAX_MESSAGE_HEADLINE_LENGTH,
@@ -41,16 +45,17 @@ class ViewModel extends BaseViewModel {
       MAX_MESSAGE_BODY_LENGTH
     })
 
-    const targetAreaType = this.targetArea.type
+    const targetAreaCategory = this.targetArea.category
+    const supportedAlertTypes = supportedAlertTypesMap[targetAreaCategory.id]
 
     // Hide the type control if there's only one option
-    const attributes = targetAreaType.alertTypes.length === 1
+    const attributes = supportedAlertTypes.length === 1
       ? { hidden: true }
       : null
 
     const typeOptions = {
       attributes: attributes,
-      items: targetAreaType.alertTypes
+      items: supportedAlertTypes
         .map(id => {
           const alertType = alertTypesMap.get(id)
           return {

@@ -1,6 +1,6 @@
 const { getAllAlerts } = require('../lib/ddb')
-const { regionsMap, groupedAreas } = require('flood-xws-common/data')
 const { countAlertTypes: count } = require('../helpers')
+const { groupedEAOwners, eaAreasMap } = require('../lib/data')
 
 module.exports = [
   {
@@ -10,37 +10,37 @@ module.exports = [
       const alerts = await getAllAlerts()
       const rows = []
 
-      Object.keys(groupedAreas).forEach(regionId => {
-        const group = groupedAreas[regionId]
-        const region = regionsMap.get(regionId)
+      Object.keys(groupedEAOwners).forEach(eaAreaId => {
+        const ownerGroup = groupedEAOwners[eaAreaId]
+        const eaArea = eaAreasMap.get(eaAreaId)
 
-        if (group.length === 1) {
-          const area = group[0]
-          const areaAlerts = alerts.filter(a => a.area.id === area.id)
+        if (ownerGroup.length === 1) {
+          const eaOwner = ownerGroup[0]
+          const areaAlerts = alerts.filter(a => a.eaArea.id === eaOwner.id)
 
           rows.push([
-            { html: `<a href='/area/${area.id}'>${area.name}</a>` },
+            { html: `<a href='/owner/${eaOwner.id}'>${eaArea.full_name}</a> <small>(${eaArea.id} ${eaOwner.id})</small>` },
             { text: count(areaAlerts, 'fa'), format: 'numeric' },
             { text: count(areaAlerts, 'fw'), format: 'numeric' },
             { text: count(areaAlerts, 'sfw'), format: 'numeric' }
           ])
         } else {
-          const regionAlerts = alerts.filter(a => a.region.id === regionId)
+          const areaAlerts = alerts.filter(a => a.eaArea.id === eaAreaId)
           rows.push([
-            { html: region.name },
-            { text: count(regionAlerts, 'fa'), format: 'numeric' },
-            { text: count(regionAlerts, 'fw'), format: 'numeric' },
-            { text: count(regionAlerts, 'sfw'), format: 'numeric' }
+            { html: `${eaArea.full_name} <small>(${eaArea.id})</small>` },
+            { text: count(areaAlerts, 'fa'), format: 'numeric' },
+            { text: count(areaAlerts, 'fw'), format: 'numeric' },
+            { text: count(areaAlerts, 'sfw'), format: 'numeric' }
           ])
 
-          group.forEach(area => {
-            const areaAlerts = alerts.filter(a => a.area.id === area.id)
-
+          ownerGroup.forEach(owner => {
+            const ownerAlerts = alerts.filter(a => a.eaOwner.id === owner.id)
+            const shortName = owner.name.replace(`${eaArea.name} - `, '')
             rows.push([
-              { html: `<a href='/area/${area.id}'>${area.name}</a>`, classes: 'app-cell-indented' },
-              { text: count(areaAlerts, 'fa'), format: 'numeric', classes: 'app-cell-secondary' },
-              { text: count(areaAlerts, 'fw'), format: 'numeric', classes: 'app-cell-secondary' },
-              { text: count(areaAlerts, 'sfw'), format: 'numeric', classes: 'app-cell-secondary' }
+              { html: `<a href='/owner/${owner.id}'>${shortName}</a> <small>(${owner.id})</small>`, classes: 'app-cell-indented' },
+              { text: count(ownerAlerts, 'fa'), format: 'numeric', classes: 'app-cell-secondary' },
+              { text: count(ownerAlerts, 'fw'), format: 'numeric', classes: 'app-cell-secondary' },
+              { text: count(ownerAlerts, 'sfw'), format: 'numeric', classes: 'app-cell-secondary' }
             ])
           })
         }

@@ -2,7 +2,7 @@ const joi = require('joi')
 const { Errors } = require('../models/form')
 const { schema, ViewModel } = require('../models/issue')
 const { issueAlert } = require('../lib/ddb')
-const { targetAreasMap } = require('flood-xws-common/data')
+const { targetAreasMap } = require('../lib/data')
 
 module.exports = [
   {
@@ -11,8 +11,8 @@ module.exports = [
     handler: async (request, h) => {
       const { code } = request.params
       const targetArea = targetAreasMap.get(code)
-      const area = targetArea.area
-      const isAlertArea = !targetArea.isWarningArea
+      const eaOwner = targetArea.eaOwner
+      const isAlertArea = !targetArea.is_warning_area
       const data = {}
 
       // If this is an Flood alert area, we can only issue a flood alert
@@ -21,7 +21,7 @@ module.exports = [
         data.type = 'fa'
       }
 
-      return h.view('issue', new ViewModel(data, undefined, { area, targetArea }))
+      return h.view('issue', new ViewModel(data, undefined, { eaOwner, targetArea }))
     },
     options: {
       validate: {
@@ -38,18 +38,18 @@ module.exports = [
       const { code } = request.params
       const payload = request.payload
       const targetArea = targetAreasMap.get(code)
-      const areaId = targetArea.area.id
+      const eaOwnerId = targetArea.ea_owner_id
       const { credentials } = request.auth
       const userId = credentials.user.id
-      const type = payload.type
+      const { type, headline, body } = payload
 
       try {
-        await issueAlert(areaId, code, type, { user_id: userId, ...payload })
+        await issueAlert(eaOwnerId, code, type, { user_id: userId, headline, body })
       } catch (err) {
         request.log('error', err)
       }
 
-      return h.redirect(`/area/${areaId}`)
+      return h.redirect(`/owner/${eaOwnerId}`)
     },
     options: {
       validate: {

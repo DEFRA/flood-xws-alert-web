@@ -14,9 +14,9 @@
       {{ govukBreadcrumbs({
         items: [
           { text: "England", href: "/" },
-          { text: area.name, href: "/area/" + area.id },
+          { text: eaOwner.name, href: "/owner/" + eaOwner.id },
           { text: targetArea.name, href: "/target-area/" + targetArea.code },
-          { text: "Issue a flood " + ("warning" if targetArea.isWarningArea else "alert") }
+          { text: "Issue a flood " + ("warning" if targetArea.is_warning_area else "alert") }
         ]
       }) }}
     </div>
@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block beforeForm %}
-  <h1 class="govuk-heading-l">Issue a flood {{ "warning" if targetArea.isWarningArea else "alert" }}</h1>
+  <h1 class="govuk-heading-l">Issue a flood {{ "warning" if targetArea.is_warning_area else "alert" }}</h1>
 {% endblock %}
 
 {% block form %}

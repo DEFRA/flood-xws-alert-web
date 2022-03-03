@@ -1,6 +1,6 @@
 const joi = require('joi')
 const { getAlert } = require('../lib/ddb')
-const { targetAreasMap } = require('flood-xws-common/data')
+const { targetAreasMap } = require('../lib/data')
 
 module.exports = [
   {
@@ -9,10 +9,9 @@ module.exports = [
     handler: async (request, h) => {
       const { code } = request.params
       const targetArea = targetAreasMap.get(code)
-      const area = targetArea.area
-      const alert = await getAlert(area.id, code)
+      const alert = await getAlert(targetArea.ea_owner_id, code)
 
-      return h.view('target-area', { code, targetArea, area, alert })
+      return h.view('target-area', { targetArea, alert })
     },
     options: {
       validate: {

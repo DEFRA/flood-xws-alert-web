@@ -6,7 +6,7 @@
       {{ govukBreadcrumbs({
         items: [
           { text: "England", href: "/" },
-          { text: area.name, href: "/area/" + area.id },
+          { text: targetArea.ea_owner.name, href: "/owner/" + targetArea.ea_owner.id },
           { text: targetArea.name }
         ]
       }) }}
@@ -24,7 +24,7 @@
       {% endif %}
 
       <h1 class="govuk-heading-xl">
-        {{ targetArea.name }} flood {{ "warning" if c.isWarningArea else "alert" }} area
+        {{ targetArea.name }} flood {{ "warning" if c.is_warning_area else "alert" }} area
       </h1>
     </div>
   </div>
@@ -53,12 +53,12 @@
         }) }}
       {% else %}
         {{ govukInsetText ({
-          text: "No flood " + ("warning" if targetArea.isWarningArea else "alert") + " in force",
+          text: "No flood " + ("warning" if targetArea.is_warning_area else "alert") + " in force",
           classes: "govuk-!-margin-top-0"
         }) }}
 
         {{ govukButton ({
-          text: "Issue a flood " + ("warning" if targetArea.isWarningArea else "alert"),
+          text: "Issue a flood " + ("warning" if targetArea.is_warning_area else "alert"),
           href: "/target-area/" + targetArea.code + "/issue",
           classes: "govuk-!-margin-bottom-2"
         }) }}
@@ -76,15 +76,15 @@
           <dd class="govuk-summary-list__value">{{ targetArea.name }}</dd>
         </div>
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Target area type</dt>
+          <dt class="govuk-summary-list__key">Target area category</dt>
           <dd class="govuk-summary-list__value">
-            {{ targetAreaTypeTag(targetArea.type.id) }}
+            {{ targetAreaCategoryTag(targetArea.category_id) }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Flooding type</dt>
           <dd class="govuk-summary-list__value">
-            {{ areaCategoryTag(targetArea.category) }}
+            {{ targetAreaTypeTag(targetArea.type_id) }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -92,13 +92,13 @@
           <dd class="govuk-summary-list__value">{{ targetArea.description }}</dd>
         </div>
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Region</dt>
-          <dd class="govuk-summary-list__value">{{ targetArea.region.name }}</dd>
+          <dt class="govuk-summary-list__key">Area</dt>
+          <dd class="govuk-summary-list__value">{{ targetArea.ea_area.name }}</dd>
         </div>
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Area</dt>
+          <dt class="govuk-summary-list__key">Owner</dt>
           <dd class="govuk-summary-list__value">
-            <a href="/area/{{ targetArea.area.id }}">{{ targetArea.area.name }}</a>
+            <a href="/owner/{{ targetArea.ea_owner.id }}">{{ targetArea.ea_owner.name }}</a>
           </dd>
         </div>
       </dl>

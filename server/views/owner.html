@@ -6,7 +6,7 @@
       {{ govukBreadcrumbs({
         items: [
           { text: "England", href: "/" },
-          { text: area.name }
+          { text: eaOwner.name }
         ]
       }) }}
     </div>
@@ -16,7 +16,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">{{ area.name }} overview</h1>
+    <h1 class="govuk-heading-l">{{ eaOwner.name }} overview</h1>
   </div>
 </div>
 
@@ -70,12 +70,12 @@
     <h2 class="govuk-heading-m">All flood target areas</h2>
     <ul class="govuk-list">
       <li>
-        <a href="/area/{{ area.id }}/target-areas?type=fwa" class="govuk-link--no-visited-state">
+        <a href="/owner/{{ eaOwner.id }}/target-areas?categoryId=fwa" class="govuk-link--no-visited-state">
           {{ fwaCount }} flood warning target areas
         </a>
       </li>
       <li>
-        <a href="/area/{{ area.id }}/target-areas?type=faa" class="govuk-link--no-visited-state">
+        <a href="/owner/{{ eaOwner.id }}/target-areas?categoryId=faa" class="govuk-link--no-visited-state">
           {{ faaCount }} flood alert target areas
         </a>
       </li>

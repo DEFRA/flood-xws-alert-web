@@ -6,8 +6,8 @@
       {{ govukBreadcrumbs({
         items: [
           { text: "England", href: "/" },
-          { text: area.name, href: "/area/" + area.id },
-          { text: targetAreaType.name + 's' }
+          { text: eaOwner.name, href: "/owner/" + eaOwner.id },
+          { text: targetAreaCategory.name + 's' }
         ]
       }) }}
     </div>
@@ -18,7 +18,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">
-        {{ targetAreaType.name }}s in {{ area.name }}
+        {{ targetAreaCategory.name }}s in {{ eaOwner.name }}
       </h1>
     </div>
   </div>
@@ -36,11 +36,11 @@
                 <span>
                   <a href="/target-area/{{ ta.code }}" class="govuk-link--no-visited-state">{{ ta.code }}</a>
                 </span>
-                <span>{{ areaCategoryTag(ta.category) }}</span>
+                <span>{{ targetAreaTypeTag(ta.type_id) }}</span>
               </div>
               <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ ta.name }}</h3>
               <p>{{ ta.description }}</p>
-              <!-- <p><b>Catchment:</b>Irish Sea</p> -->
+              <small><b>River or sea:</b> {{ ta.river_sea }}</small>
               {% if ta.alert %}
                 <span class="app-in-force-label">{{ ta.alert.type.name }} in force</span>
               {% endif %}

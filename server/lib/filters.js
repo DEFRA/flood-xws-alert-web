@@ -12,7 +12,7 @@ function alertTypeTag (type) {
   }
 }
 
-function areaCategoryTag (type) {
+function targetAreaTypeTag (type) {
   if (type === 't') {
     return '<strong class="govuk-tag govuk-tag--purple">tidal</strong>'
   } else if (type === 'c') {
@@ -27,7 +27,7 @@ function areaCategoryTag (type) {
   }
 }
 
-function targetAreaTypeTag (type) {
+function targetAreaCategoryTag (type) {
   if (type === 'faa') {
     return '<strong class="govuk-tag govuk-tag--blue">alert</strong>'
   } else if (type === 'fwa') {
@@ -42,6 +42,6 @@ function date (date, format = DATE_FORMAT) {
 module.exports = {
   date,
   alertTypeTag,
-  areaCategoryTag,
-  targetAreaTypeTag
+  targetAreaTypeTag,
+  targetAreaCategoryTag
 }

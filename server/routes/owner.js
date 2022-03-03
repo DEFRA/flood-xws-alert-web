@@ -1,7 +1,7 @@
 const joi = require('joi')
 const date = require('flood-xws-common/date')
 const { DATE_FORMAT } = require('flood-xws-common/constants')
-const { areasMap, getTargetAreas } = require('flood-xws-common/data')
+const { eaOwnersMap, targetAreas } = require('../lib/data')
 const { countAlertTypes: count } = require('../helpers')
 const { getAlerts } = require('../lib/ddb')
 const { alertTypeTag } = require('../lib/filters')
@@ -9,18 +9,18 @@ const { alertTypeTag } = require('../lib/filters')
 module.exports = [
   {
     method: 'GET',
-    path: '/area/{areaId}',
+    path: '/owner/{ownerId}',
     handler: async (request, h) => {
-      const areaId = request.params.areaId
-      const area = areasMap.get(areaId)
-      const alerts = await getAlerts(areaId)
-      const targetAreas = getTargetAreas(areaId)
-      const alertAreas = targetAreas.filter(a => !a.isWarningArea)
-      const warningAreas = targetAreas.filter(a => a.isWarningArea)
+      const eaOwnerId = request.params.ownerId
+      const eaOwner = eaOwnersMap.get(eaOwnerId)
+      const alerts = await getAlerts(eaOwnerId)
+      const ownerTargetAreas = targetAreas.filter(ta => ta.ea_owner_id === eaOwnerId)
+      const alertAreas = ownerTargetAreas.filter(a => !a.is_warning_area)
+      const warningAreas = ownerTargetAreas.filter(a => a.is_warning_area)
 
       const alertRows = alerts.map(a => {
         const alertCode = a.code
-        const targetArea = targetAreas.find(ta => ta.code === alertCode)
+        const targetArea = ownerTargetAreas.find(ta => ta.code === alertCode)
 
         return [
           {
@@ -32,9 +32,9 @@ module.exports = [
         ]
       })
 
-      return h.view('area', {
-        area,
-        areaId,
+      return h.view('owner', {
+        eaOwner,
+        eaOwnerId,
         faCount: count(alerts, 'fa'),
         fwCount: count(alerts, 'fw'),
         sfwCount: count(alerts, 'sfw'),
@@ -49,7 +49,7 @@ module.exports = [
       },
       validate: {
         params: joi.object().keys({
-          areaId: joi.string().required().valid(...areasMap.keys())
+          ownerId: joi.string().required().valid(...eaOwnersMap.keys())
         })
       }
     }

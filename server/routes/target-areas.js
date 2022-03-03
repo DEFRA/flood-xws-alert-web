@@ -1,32 +1,32 @@
 const joi = require('joi')
 const { getAlerts } = require('../lib/ddb')
 const { sortBy } = require('flood-xws-common/helpers')
-const { areasMap, targetAreaTypesMap, targetAreas } = require('flood-xws-common/data')
+const { eaOwnersMap, targetAreaCategoriesMap, targetAreas } = require('../lib/data')
 
-const filter = (areaId, type) => ta => ta.area.id === areaId && ta.type.id === type
+const filter = (ownerId, categoryId) => ta => ta.ea_owner_id === ownerId && ta.category_id === categoryId
 const mapper = alerts => ta => {
   const alert = alerts.find(a => a.code === ta.code)
-  ta.alert = alert
-  ta.sort = alert ? alert.updated : 0
-  return ta
+  return { ...ta, alert, sort: alert ? alert.updated : 0 }
 }
 
 module.exports = [
   {
     method: 'GET',
-    path: '/area/{areaId}/target-areas',
+    path: '/owner/{ownerId}/target-areas',
     handler: async (request, h) => {
-      const { areaId } = request.params
-      const { type } = request.query
-      const alerts = await getAlerts(areaId)
-      const area = areasMap.get(areaId)
-      const targetAreaType = targetAreaTypesMap.get(type)
+      const { ownerId } = request.params
+      const { categoryId } = request.query
+      const alerts = await getAlerts(ownerId)
+      const eaOwner = eaOwnersMap.get(ownerId)
+      const targetAreaCategory = targetAreaCategoriesMap.get(categoryId)
       const targetAreasList = targetAreas
-        .filter(filter(areaId, type))
+        .filter(filter(ownerId, categoryId))
         .map(mapper(alerts))
         .sort(sortBy('-sort'))
 
-      return h.view('target-areas', { alerts, type, targetAreaType, area, targetAreasList })
+      const model = { alerts, targetAreaCategory, eaOwner, targetAreasList }
+
+      return h.view('target-areas', model)
     },
     options: {
       auth: {
@@ -34,10 +34,10 @@ module.exports = [
       },
       validate: {
         params: joi.object().keys({
-          areaId: joi.string().required().valid(...areasMap.keys())
+          ownerId: joi.string().required().valid(...eaOwnersMap.keys())
         }).required(),
         query: joi.object().keys({
-          type: joi.string().required().valid(...targetAreaTypesMap.keys())
+          categoryId: joi.string().required().valid(...targetAreaCategoriesMap.keys())
         }).required()
       }
     }

@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const { v4: uuid } = require('uuid')
 const config = require('../config')
-const { alertTypesMap, areasMap, regionsMap } = require('flood-xws-common/data')
+const { alertTypesMap, eaAreasMap, eaOwnersMap } = require('./data')
 const ddb = new AWS.DynamoDB.DocumentClient()
 const tableName = config.dynamodbTableName
 
@@ -17,12 +17,12 @@ async function getAllAlerts () {
   return result.Items.map(formatAlert)
 }
 
-async function getAlerts (areaId) {
+async function getAlerts (ownerId) {
   const result = await ddb.query({
     KeyConditionExpression: 'pk = :pk and begins_with(sk, :sk)',
     ExpressionAttributeValues: {
       ':pk': 'A',
-      ':sk': `AR#${areaId}#`
+      ':sk': `O#${ownerId}#`
     },
     TableName: tableName
   }).promise()
@@ -30,11 +30,11 @@ async function getAlerts (areaId) {
   return result.Items.map(formatAlert)
 }
 
-async function getAlert (areaId, code, includeData = true) {
+async function getAlert (ownerId, code, includeData = true) {
   const result = await ddb.get({
     Key: {
       pk: 'A',
-      sk: `AR#${areaId}#TA#${code}`
+      sk: `O#${ownerId}#TA#${code}`
     },
     TableName: tableName
   }).promise()
@@ -64,18 +64,18 @@ async function getAlert (areaId, code, includeData = true) {
 
 function formatAlert (alert) {
   const split = alert.sk.split('#')
-  const areaId = split[1]
-  const area = areasMap.get(areaId)
-  const regionId = area.regionId
-  const region = regionsMap.get(regionId)
+  const ownerId = split[1]
+  const eaOwner = eaOwnersMap.get(ownerId)
+  const eaAreaId = eaOwner.ea_area_id
+  const eaArea = eaAreasMap.get(eaAreaId)
 
   return {
     id: alert.id,
     code: split[3],
     updated: alert.updated,
-    area,
-    region,
-    type: alertTypesMap.get(alert.type)
+    eaOwner,
+    eaArea,
+    type: alertTypesMap.get(alert.type_id)
   }
 }
 
@@ -99,9 +99,12 @@ function formatAlert (alert) {
 //   return item
 // }
 
-async function issueAlert (areaId, code, type, attributes) {
+async function issueAlert (eaOwnerId, code, typeId, attributes) {
   const id = uuid()
   const updated = Date.now()
+  const eaOwner = eaOwnersMap.get(eaOwnerId)
+  const eaAreaId = eaOwner.ea_area_id
+
   const params = {
     TransactItems: [
       {
@@ -110,8 +113,10 @@ async function issueAlert (areaId, code, type, attributes) {
           Item: {
             pk: 'AD',
             sk: id,
-            areaId,
             code,
+            type_id: typeId,
+            ea_owner_id: eaOwnerId,
+            ea_area_id: eaAreaId,
             updated,
             ...attributes
           },
@@ -123,9 +128,9 @@ async function issueAlert (areaId, code, type, attributes) {
           TableName: tableName,
           Item: {
             pk: 'A',
-            sk: `AR#${areaId}#TA#${code}`,
+            sk: `O#${eaOwnerId}#TA#${code}`,
             id,
-            type,
+            type_id: typeId,
             updated
           },
           ConditionExpression: 'attribute_not_exists(sk)'
@@ -137,7 +142,7 @@ async function issueAlert (areaId, code, type, attributes) {
       //     TableName: tableName,
       //     Key: {
       //       pk: 'C',
-      //       sk: `AR#${areaId}`
+      //       sk: `O#${ownerId}`
       //     },
       //     UpdateExpression: 'ADD #counter :incr',
       //     ExpressionAttributeNames: {

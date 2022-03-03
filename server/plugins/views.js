@@ -2,7 +2,7 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const pkg = require('../../package.json')
-const { date, alertTypeTag, areaCategoryTag, targetAreaTypeTag } = require('../lib/filters')
+const { date, alertTypeTag, targetAreaCategoryTag, targetAreaTypeTag } = require('../lib/filters')
 const serviceName = 'Manage flood alerts'
 const { markSafe } = require('nunjucks/src/runtime')
 
@@ -29,8 +29,8 @@ module.exports = {
 
           // Register globals/filters
           env.addGlobal('alertTypeTag', markSafe(alertTypeTag))
-          env.addGlobal('areaCategoryTag', markSafe(areaCategoryTag))
           env.addGlobal('targetAreaTypeTag', markSafe(targetAreaTypeTag))
+          env.addGlobal('targetAreaCategoryTag', markSafe(targetAreaCategoryTag))
 
           env.addFilter('date', date)
 
