@@ -16,7 +16,7 @@ module.exports = [
 
         if (ownerGroup.length === 1) {
           const eaOwner = ownerGroup[0]
-          const areaAlerts = alerts.filter(a => a.eaArea.id === eaOwner.id)
+          const areaAlerts = alerts.filter(a => a.eaArea.id === eaArea.id)
 
           rows.push([
             { html: `<a href='/owner/${eaOwner.id}'>${eaArea.name}</a> <small>(${eaArea.id} ${eaOwner.id})</small>` },
