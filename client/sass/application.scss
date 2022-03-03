@@ -199,6 +199,10 @@ a.app-link-destructive {
 		align-items: center;
 		justify-content: space-between;
 	}
+
+	p:last-child {
+		margin-bottom: 0;
+	}
 }
 
 .app-target-area-in-force {

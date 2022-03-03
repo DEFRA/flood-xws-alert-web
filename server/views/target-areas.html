@@ -40,7 +40,9 @@
               </div>
               <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ ta.name }}</h3>
               <p>{{ ta.description }}</p>
-              <small><b>River or sea:</b> {{ ta.river_sea }}</small>
+              {% if ta.river_sea %}
+                <p><small><b>River or sea:</b> {{ ta.river_sea }}</small></p>
+              {% endif %}
               {% if ta.alert %}
                 <span class="app-in-force-label">{{ ta.alert.type.name }} in force</span>
               {% endif %}
