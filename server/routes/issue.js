@@ -11,7 +11,7 @@ module.exports = [
     handler: async (request, h) => {
       const { code } = request.params
       const targetArea = targetAreasMap.get(code)
-      const eaOwner = targetArea.eaOwner
+      const eaOwner = targetArea.ea_owner
       const isAlertArea = !targetArea.is_warning_area
       const data = {}
 

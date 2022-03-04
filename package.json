@@ -48,8 +48,7 @@
   },
   "standard": {
     "ignore": [
-      "/server/public/static/vendor",
-      "/server/public/static/js/map.js"
+      "/server/public/static/vendor"
     ]
   }
 }

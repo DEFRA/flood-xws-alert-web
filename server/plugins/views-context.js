@@ -1,4 +1,5 @@
 const { scopes } = require('../permissions')
+const config = require('../config')
 
 /*
 * Adds an `onPreResponse` listener to apply
@@ -21,6 +22,7 @@ module.exports = {
 
           ctx.auth = auth
           ctx.scopes = scopes
+          ctx.s3BucketUrl = config.s3BucketUrl
 
           const navigation = []
 

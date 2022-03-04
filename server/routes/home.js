@@ -34,9 +34,16 @@ module.exports = [
           ])
 
           ownerGroup.forEach(owner => {
+            // De-duplicate the owner name, removing
+            // the area name prefix where appropriate
+            const prefix = `${eaArea.name} - `
+            const name = owner.name.startsWith(prefix)
+              ? owner.name.substr(prefix.length)
+              : owner.name
+
             const ownerAlerts = alerts.filter(a => a.eaOwner.id === owner.id)
             rows.push([
-              { html: `<a href='/owner/${owner.id}'>${owner.name}</a> <small>(${owner.id})</small>`, classes: 'app-cell-indented' },
+              { html: `<a href='/owner/${owner.id}'>${name}</a> <small>(${owner.id})</small>`, classes: 'app-cell-indented' },
               { text: count(ownerAlerts, 'fa'), format: 'numeric', classes: 'app-cell-secondary' },
               { text: count(ownerAlerts, 'fw'), format: 'numeric', classes: 'app-cell-secondary' },
               { text: count(ownerAlerts, 'sfw'), format: 'numeric', classes: 'app-cell-secondary' }

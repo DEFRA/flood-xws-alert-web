@@ -60,6 +60,11 @@
   <!-- <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" /> -->
   <link href="{{ assetPath }}/stylesheets/unbranded.css" rel="stylesheet" />
 
+  <script>
+    window.XWS = {
+      s3BucketUrl: '{{ s3BucketUrl }}'
+    }
+  </script>
   {% block styles %}
   {% endblock %}
 {% endblock %}

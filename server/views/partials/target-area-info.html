@@ -1,0 +1,39 @@
+{% macro targetAreaInfo(targetArea) %}
+<h2 class="govuk-heading-m">Target area information</h2>
+<dl class="govuk-summary-list app-summary-list-vertical">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Code</dt>
+    <dd class="govuk-summary-list__value">{{ targetArea.code }}</dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Name</dt>
+    <dd class="govuk-summary-list__value">{{ targetArea.name }}</dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Target area category</dt>
+    <dd class="govuk-summary-list__value">
+      {{ targetAreaCategoryTag(targetArea.category_id) }}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Flooding type</dt>
+    <dd class="govuk-summary-list__value">
+      {{ targetAreaTypeTag(targetArea.type_id) }}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Description</dt>
+    <dd class="govuk-summary-list__value">{{ targetArea.description }}</dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Area</dt>
+    <dd class="govuk-summary-list__value">{{ targetArea.ea_area.name }}</dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">Owner</dt>
+    <dd class="govuk-summary-list__value">
+      <a href="/owner/{{ targetArea.ea_owner.id }}">{{ targetArea.ea_owner.name }}</a>
+    </dd>
+  </div>
+</dl>
+{% endmacro %}

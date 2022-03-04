@@ -1,4 +1,10 @@
 {% extends "layout.html" %}
+{% from "partials/target-area-info.html" import targetAreaInfo %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{{ assetPath }}/css/ol.css" type="text/css">
+  <link rel="stylesheet" href="{{ assetPath }}/css/map.css" type="text/css">
+{% endblock %}
 
 {% block contextBanner %}
   <div class="app-context-banner">
@@ -31,6 +37,10 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {{ govukDetails({
+        summaryText: "View a map of the area",
+        html: "<div id='map'></div>"
+      }) }}
       {% if alert %}
         <h2 class="govuk-heading-l">
           Issued at {{ alert.updated | date("HH:mm on DD MMMM YYYY") }}
@@ -64,44 +74,16 @@
         }) }}
       {% endif %}
     </div>
-    <div class="govuk-grid-column-one-third">
-      <h2 class="govuk-heading-m">Target area information</h2>
-      <dl class="govuk-summary-list app-summary-list-vertical">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Code</dt>
-          <dd class="govuk-summary-list__value">{{ targetArea.code }}</dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name</dt>
-          <dd class="govuk-summary-list__value">{{ targetArea.name }}</dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Target area category</dt>
-          <dd class="govuk-summary-list__value">
-            {{ targetAreaCategoryTag(targetArea.category_id) }}
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Flooding type</dt>
-          <dd class="govuk-summary-list__value">
-            {{ targetAreaTypeTag(targetArea.type_id) }}
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Description</dt>
-          <dd class="govuk-summary-list__value">{{ targetArea.description }}</dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Area</dt>
-          <dd class="govuk-summary-list__value">{{ targetArea.ea_area.name }}</dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Owner</dt>
-          <dd class="govuk-summary-list__value">
-            <a href="/owner/{{ targetArea.ea_owner.id }}">{{ targetArea.ea_owner.name }}</a>
-          </dd>
-        </div>
-      </dl>
+    <div class="govuk-grid-column-one-third">      
+      {{ targetAreaInfo(targetArea) }}
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ assetPath }}/vendor/ol/ol.js"></script>
+  <script src="{{ assetPath }}/js/map.js"></script>
+  <script type="text/javascript">
+    window.XWS.map('map', '{{ targetArea.code }}')
+  </script>
 {% endblock %}

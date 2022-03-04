@@ -16,7 +16,8 @@ const schema = joi.object().keys({
   adClientId: joi.string().required(),
   adClientSecret: joi.string().required(),
   adTenant: joi.string().required(),
-  dynamodbTableName: joi.string().required()
+  dynamodbTableName: joi.string().required(),
+  s3BucketUrl: joi.string().uri().required()
 })
 
 const config = {
@@ -32,7 +33,8 @@ const config = {
   adClientId: process.env.AD_CLIENT_ID,
   adClientSecret: process.env.AD_CLIENT_SECRET,
   adTenant: process.env.AD_TENANT,
-  dynamodbTableName: process.env.DYNAMODB_TABLE_NAME
+  dynamodbTableName: process.env.DYNAMODB_TABLE_NAME,
+  s3BucketUrl: process.env.S3_BUCKET_URL
 }
 
 // Validate config
