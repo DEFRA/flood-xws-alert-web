@@ -37,10 +37,14 @@ const schema = joi.object().keys({
 }).messages(baseMessages).required()
 
 class ViewModel extends BaseViewModel {
-  constructor (data, err, extra) {
+  constructor (data, err, { targetArea, ...rest }) {
+    const suffix = targetArea.is_warning_area ? 'warning' : 'alert'
+    const pageHeading = `Issue a flood ${suffix}`
+
     super(data, err, {
-      ...extra,
-      pageHeading: 'Issue',
+      ...rest,
+      pageHeading,
+      targetArea,
       MAX_MESSAGE_HEADLINE_LENGTH,
       MAX_MESSAGE_BODY_LENGTH
     })

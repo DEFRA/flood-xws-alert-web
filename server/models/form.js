@@ -1,5 +1,3 @@
-const config = require('../config')
-
 const baseMessages = {
   'string.max': '{{#label}} must be {{#limit}} characters or fewer'
 }
@@ -12,7 +10,7 @@ class BaseViewModel {
     this.fields = {}
     Object.assign(this, rest)
     this.pageHeading = pageHeading
-    this.pageTitle = `${this.errorList.length ? 'Error: ' : ''}${pageHeading} - ${config.defaultPageTitle}`
+    this.pageTitle = `${this.errorList.length ? 'Error: ' : ''}${pageHeading}`
     this.path = path
     this.previousPath = previousPath
   }

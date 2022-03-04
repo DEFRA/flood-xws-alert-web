@@ -24,7 +24,15 @@ module.exports = [
         .map(mapper(alerts))
         .sort(sortBy('-sort'))
 
-      const model = { alerts, targetAreaCategory, eaOwner, targetAreasList }
+      const pageHeading = `${targetAreaCategory.name}s for ${eaOwner.name}`
+      const model = {
+        pageHeading,
+        pageTitle: pageHeading,
+        alerts,
+        targetAreaCategory,
+        eaOwner,
+        targetAreasList
+      }
 
       return h.view('target-areas', model)
     },

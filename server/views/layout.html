@@ -82,7 +82,7 @@
 {% endblock %}
 
 {% block pageTitle %}
-  {{ pageTitle }}
+  {{ (pageTitle + " - ") if pageTitle != serviceName else "" }} {{ serviceName }} - EA.GOV.UK
 {% endblock %}
 
 {% block beforeContent %}

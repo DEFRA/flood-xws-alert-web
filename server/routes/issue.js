@@ -21,7 +21,9 @@ module.exports = [
         data.type = 'fa'
       }
 
-      return h.view('issue', new ViewModel(data, undefined, { eaOwner, targetArea }))
+      const model = new ViewModel(data, undefined, { targetArea, eaOwner })
+
+      return h.view('issue', model)
     },
     options: {
       validate: {
@@ -47,6 +49,8 @@ module.exports = [
         await issueAlert(eaOwnerId, code, type, { user_id: userId, headline, body })
       } catch (err) {
         request.log('error', err)
+        // TODO: panic
+        throw err
       }
 
       return h.redirect(`/owner/${eaOwnerId}`)
@@ -58,12 +62,14 @@ module.exports = [
         }),
         payload: schema,
         failAction: async (request, h, err) => {
-          const { code } = request.params
+          const { params, payload } = request
+          const { code } = params
           const targetArea = targetAreasMap.get(code)
-          const area = targetArea.area
-
+          const eaOwner = targetArea.ea_owner
           const errors = Errors.fromJoi(err)
-          return h.view('issue', new ViewModel(request.payload, errors, { area, targetArea })).takeover()
+          const model = new ViewModel(payload, errors, { eaOwner, targetArea })
+
+          return h.view('issue', model).takeover()
         }
       }
     }

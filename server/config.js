@@ -48,4 +48,7 @@ if (error) {
 // Add some helper props
 value.isDev = value.env === 'development'
 
+value.serviceName = 'Manage flood alerts'
+value.defaultPageTitle = `${value.serviceName}`
+
 module.exports = value

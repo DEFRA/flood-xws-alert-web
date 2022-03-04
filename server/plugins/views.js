@@ -3,7 +3,6 @@ const nunjucks = require('nunjucks')
 const config = require('../config')
 const pkg = require('../../package.json')
 const { date, alertTypeTag, targetAreaCategoryTag, targetAreaTypeTag } = require('../lib/filters')
-const serviceName = 'Manage flood alerts'
 const { markSafe } = require('nunjucks/src/runtime')
 
 module.exports = {
@@ -44,8 +43,8 @@ module.exports = {
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
-      serviceName: serviceName,
-      pageTitle: `${serviceName}`
+      serviceName: config.serviceName,
+      pageTitle: config.defaultPageTitle
     }
   }
 }

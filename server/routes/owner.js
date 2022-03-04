@@ -17,6 +17,7 @@ module.exports = [
       const ownerTargetAreas = targetAreas.filter(ta => ta.ea_owner_id === eaOwnerId)
       const alertAreas = ownerTargetAreas.filter(a => !a.is_warning_area)
       const warningAreas = ownerTargetAreas.filter(a => a.is_warning_area)
+      const pageHeading = `${eaOwner.name} overview`
 
       const alertRows = alerts.map(a => {
         const alertCode = a.code
@@ -33,6 +34,8 @@ module.exports = [
       })
 
       return h.view('owner', {
+        pageHeading,
+        pageTitle: pageHeading,
         eaOwner,
         eaOwnerId,
         faCount: count(alerts, 'fa'),

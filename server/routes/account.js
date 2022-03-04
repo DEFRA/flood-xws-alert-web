@@ -5,7 +5,10 @@ module.exports = [
     handler: async (request, h) => {
       const { credentials } = request.auth
 
-      return h.view('account', { credentials })
+      return h.view('account', {
+        pageTitle: 'Account',
+        credentials
+      })
     }
   }
 ]

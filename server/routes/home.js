@@ -52,7 +52,11 @@ module.exports = [
         }
       })
 
+      const pageHeading = 'National flooding overview'
+
       return h.view('home', {
+        pageHeading,
+        pageTitle: pageHeading,
         faCount: count(alerts, 'fa'),
         fwCount: count(alerts, 'fw'),
         sfwCount: count(alerts, 'sfw'),
