@@ -1,7 +1,7 @@
 {
   "name": "flood-xws-alert-web",
   "version": "0.0.1",
-  "description": "XWS Alert Web - the alert managment application",
+  "description": "XWS Alert Web - the alert management application",
   "engines": {
     "node": "14"
   },
