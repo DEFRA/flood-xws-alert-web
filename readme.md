@@ -17,6 +17,7 @@ Internal facing "Manage flood alerts" website for issuing alerts
 | AD_TENANT               | Active directory tenant        | yes        |                               |
 | HOME_PAGE               | The home page URL              | yes        |                               |
 | DYNAMODB_TABLE_NAME     | DynamoDB table name            | yes        |                               |
+| S3_BUCKET_URL           | S3 bucket url                  | yes        |                               |
 
 As per [12 Factor principles](https://12factor.net/config) application config is stored in environment variables (env vars). For ease of local development the service should have a `.env` file in its root folder. Starter `.env` files for local development for this service are held in the [xws config repo](https://github.com/DEFRA/flood-xws-config/tree/master/flood-xws-alert-web) repository.
 
