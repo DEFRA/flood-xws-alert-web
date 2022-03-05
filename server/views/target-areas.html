@@ -26,9 +26,9 @@
   <div class='govuk-grid-row'>
     <div class="govuk-grid-column-two-thirds">
       <div class="app-target-area-list">
-        <!-- <pre>{{ alerts | dump | safe }}</pre>
+        {#<pre>{{ alerts | dump | safe }}</pre>
         {{ targetAreasList.length }}
-        <pre>{{ area | dump(2) | safe }}</pre> -->
+        <pre>{{ area | dump(2) | safe }}</pre>#}
         <ul class="govuk-list">
           {% for ta in targetAreasList %}
             <li class="app-target-area-summary govuk-!-margin-bottom-4 {{ 'app-target-area-in-force' if ta.alert }}">
