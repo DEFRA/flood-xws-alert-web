@@ -41,6 +41,7 @@ module.exports = {
     relativeTo: __dirname,
     isCached: !config.isDev,
     context: {
+      env: config.env,
       appVersion: pkg.version,
       assetPath: '/assets',
       serviceName: config.serviceName,

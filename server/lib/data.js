@@ -1,10 +1,11 @@
+const { freeze } = require('../helpers')
 const { groupBy } = require('flood-xws-common/helpers')
-const alertTypes = Object.freeze(require('../data/alert-type.json'))
-const targetAreaTypes = Object.freeze(require('../data/target-area-type.json'))
-const targetAreas = Object.freeze(require('../data/target-area.json'))
-const eaAreas = Object.freeze(require('../data/ea-area.json'))
-const eaOwners = Object.freeze(require('../data/ea-owner.json'))
-const targetAreaCategories = Object.freeze(require('../data/target-area-category.json'))
+const alertTypes = freeze(require('../data/alert-type.json'))
+const targetAreaTypes = freeze(require('../data/target-area-type.json'))
+const targetAreas = require('../data/target-area.json')
+const eaAreas = freeze(require('../data/ea-area.json'))
+const eaOwners = freeze(require('../data/ea-owner.json'))
+const targetAreaCategories = freeze(require('../data/target-area-category.json'))
 
 const groupedEAOwners = groupBy(eaOwners, 'ea_area_id')
 const eaAreasMap = new Map(eaAreas.map(area => [area.id, area]))
@@ -22,8 +23,9 @@ targetAreas.forEach(ta => {
   ta.type = targetAreaTypesMap.get(ta.type_id)
   ta.category = targetAreaCategoriesMap.get(ta.category_id)
   ta.is_warning_area = ta.category_id === 'fwa'
-  Object.freeze(ta)
 })
+
+freeze(targetAreas)
 
 const targetAreasMap = new Map(targetAreas.map(ta => [ta.code, ta]))
 

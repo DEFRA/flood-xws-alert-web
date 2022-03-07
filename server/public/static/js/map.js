@@ -20,9 +20,9 @@
         })
       }
 
-      const props = feature.getProperties()
-      const categoryId = props.category_id
-      const isFWA = categoryId === 'fwa'
+      // const props = feature.getProperties()
+      // const categoryId = props.category_id
+      // const isFWA = categoryId === 'fwa'
 
       return new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -33,7 +33,7 @@
         }),
         fill: new ol.style.Fill({
           // color: 'rgba(255, 221, 2, 0.2)',
-          color: 'rgba(29, 112, 184, 0.2)',
+          color: 'rgba(29, 112, 184, 0.2)' //,
           // color: isFWA ? 'rgba(227, 0, 15, 0.1)' : 'rgba(242, 134, 2, 0.1)'
         })
       })
