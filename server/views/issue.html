@@ -26,6 +26,47 @@
   {{ govukRadios(fields.type) }}
   {{ govukCharacterCount(fields.headline) }}
   {{ govukCharacterCount(fields.body) }}
+
+  {% call govukFieldset({
+    legend: {
+      text: "CAP",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  }) %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukSelect(fields.cap_msg_type) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukSelect(fields.cap_severity) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukSelect(fields.cap_urgency) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukSelect(fields.cap_certainty) }}
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukCheckboxes(fields.cap_category) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukCheckboxes(fields.cap_response_type) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukSelect(fields.cap_status) }}
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        {{ govukSelect(fields.cap_scope) }}
+      </div>
+    </div>
+   
+  {% endcall %}
+
 {% endblock %}
 
 {% block oneThird %}     

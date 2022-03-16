@@ -43,10 +43,11 @@ module.exports = [
       const eaOwnerId = targetArea.ea_owner_id
       const { credentials } = request.auth
       const userId = credentials.user.id
-      const { type, headline, body } = payload
+      const { type, ...rest } = payload
 
       try {
-        await issueAlert(eaOwnerId, code, type, { user_id: userId, headline, body })
+        const attrs = { user_id: userId, ...rest }
+        await issueAlert(eaOwnerId, code, type, attrs)
       } catch (err) {
         request.log('error', err)
         // TODO: panic
