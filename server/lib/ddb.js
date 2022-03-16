@@ -135,6 +135,23 @@ async function issueAlert (eaOwnerId, code, typeId, attributes) {
           },
           ConditionExpression: 'attribute_not_exists(sk)'
         }
+      },
+      {
+        Put: {
+          TableName: tableName,
+          Item: {
+            pk: 'AA',
+            sk: `O#${eaOwnerId}#TA#${code}#${id}`,
+            id,
+            code,
+            type_id: typeId,
+            ea_owner_id: eaOwnerId,
+            ea_area_id: eaAreaId,
+            updated,
+            ...attributes
+          },
+          ConditionExpression: 'attribute_not_exists(sk)'
+        }
       }
       // ,
       // {
