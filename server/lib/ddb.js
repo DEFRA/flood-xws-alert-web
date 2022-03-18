@@ -104,6 +104,7 @@ async function issueAlert (eaOwnerId, code, typeId, attributes) {
   const updated = Date.now()
   const eaOwner = eaOwnersMap.get(eaOwnerId)
   const eaAreaId = eaOwner.ea_area_id
+  const common = { id, type_id: typeId, updated }
 
   const params = {
     TransactItems: [
@@ -113,11 +114,10 @@ async function issueAlert (eaOwnerId, code, typeId, attributes) {
           Item: {
             pk: 'AD',
             sk: id,
+            ...common,
             code,
-            type_id: typeId,
             ea_owner_id: eaOwnerId,
             ea_area_id: eaAreaId,
-            updated,
             ...attributes
           },
           ConditionExpression: 'attribute_not_exists(sk)'
@@ -129,9 +129,7 @@ async function issueAlert (eaOwnerId, code, typeId, attributes) {
           Item: {
             pk: 'A',
             sk: `O#${eaOwnerId}#TA#${code}`,
-            id,
-            type_id: typeId,
-            updated
+            ...common
           },
           ConditionExpression: 'attribute_not_exists(sk)'
         }
