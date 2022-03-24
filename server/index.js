@@ -27,6 +27,15 @@ async function createServer () {
     }
   })
 
+  server.state('session', {
+    path: '/',
+    isSecure: config.cookie.isSecure,
+    isHttpOnly: true,
+    encoding: 'base64json',
+    clearInvalid: true,
+    strictHeader: true
+  })
+
   // Register the plugins
   await server.register(require('@hapi/inert'))
   await server.register(require('@hapi/cookie'))

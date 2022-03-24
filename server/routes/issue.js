@@ -1,7 +1,6 @@
 const joi = require('joi')
 const { Errors } = require('../models/form')
 const { schema, ViewModel } = require('../models/issue')
-const { issueAlert } = require('../lib/ddb')
 const { targetAreasMap } = require('../lib/data')
 
 module.exports = [
@@ -39,22 +38,12 @@ module.exports = [
     handler: async (request, h) => {
       const { code } = request.params
       const payload = request.payload
-      const targetArea = targetAreasMap.get(code)
-      const eaOwnerId = targetArea.ea_owner_id
-      const { credentials } = request.auth
-      const userId = credentials.user.id
-      const { type, ...rest } = payload
+      const capDefaults = getCapDefaults(payload.type)
 
-      try {
-        const attrs = { user_id: userId, ...rest }
-        await issueAlert(eaOwnerId, code, type, attrs)
-      } catch (err) {
-        request.log('error', err)
-        // TODO: panic
-        throw err
-      }
+      // Store in session state
+      h.state('session', { issue: { ...payload, ...capDefaults } })
 
-      return h.redirect(`/owner/${eaOwnerId}`)
+      return h.redirect(`/target-area/${code}/issue-cap`)
     },
     options: {
       validate: {
@@ -76,3 +65,52 @@ module.exports = [
     }
   }
 ]
+
+function getCapDefaults (typeId) {
+  switch (typeId) {
+    case 'fa':
+      return {
+        cap_status: 'Actual',
+        cap_msg_type: 'Alert',
+        cap_scope: 'Public',
+        cap_category: ['Geo', 'Met', 'Env'],
+        cap_response_type: ['Monitor', 'Prepare'],
+        cap_urgency: 'Expected',
+        cap_severity: 'Minor',
+        cap_certainty: 'Likely'
+      }
+    case 'fw':
+      return {
+        cap_status: 'Actual',
+        cap_msg_type: 'Alert',
+        cap_scope: 'Public',
+        cap_category: ['Geo', 'Met', 'Env'],
+        cap_response_type: ['Execute', 'Monitor', 'Prepare'],
+        cap_urgency: 'Expected',
+        cap_severity: 'Moderate',
+        cap_certainty: 'Likely'
+      }
+    case 'sfw':
+      return {
+        cap_status: 'Actual',
+        cap_msg_type: 'Alert',
+        cap_scope: 'Public',
+        cap_category: ['Geo', 'Met', 'Env'],
+        cap_response_type: ['Shelter', 'Evacuate', 'Execute', 'Monitor', 'Prepare'],
+        cap_urgency: 'Immediate',
+        cap_severity: 'Severe',
+        cap_certainty: 'Observed'
+      }
+    case 'wnlif':
+      return {
+        cap_status: 'Actual',
+        cap_msg_type: 'Cancel',
+        cap_scope: 'Public',
+        cap_category: ['Geo', 'Met', 'Env'],
+        cap_response_type: ['AllClear'],
+        cap_urgency: 'Past',
+        cap_severity: 'Unknown',
+        cap_certainty: 'Unknown'
+      }
+  }
+}

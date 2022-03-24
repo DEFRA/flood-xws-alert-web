@@ -6,6 +6,7 @@ const routes = [].concat(
   require('../routes/target-areas'),
   require('../routes/account'),
   require('../routes/issue'),
+  require('../routes/issue-cap'),
   require('../routes/status'),
   require('../routes/public')
 )

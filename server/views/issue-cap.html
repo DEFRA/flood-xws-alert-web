@@ -24,9 +24,38 @@
 {% endblock %}
 
 {% block form %}
-  {{ govukRadios(fields.type) }}
-  {{ govukCharacterCount(fields.headline) }}
-  {{ govukCharacterCount(fields.body) }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      {{ govukRadios(fields.cap_severity) }}
+    </div>
+    <div class="govuk-grid-column-one-third">
+      {{ govukRadios(fields.cap_urgency) }}
+    </div>
+    <div class="govuk-grid-column-one-third">
+      {{ govukRadios(fields.cap_certainty) }}
+    </div>
+  </div>
+
+
+  <div class="govuk-grid-row" hidden>
+    <div class="govuk-grid-column-one-third">
+      {{ govukSelect(fields.cap_msg_type) }}
+    </div>
+    <div class="govuk-grid-column-one-third">
+      {{ govukSelect(fields.cap_status) }}
+    </div>
+    <div class="govuk-grid-column-one-third">
+      {{ govukSelect(fields.cap_scope) }}
+    </div>
+  </div>
+  <div class="govuk-grid-row" hidden>
+    <div class="govuk-grid-column-one-half">
+      {{ govukCheckboxes(fields.cap_category) }}
+    </div>
+    <div class="govuk-grid-column-one-half">
+      {{ govukCheckboxes(fields.cap_response_type) }}
+    </div>
+  </div>
 {% endblock %}
 
 {% block oneThird %}     
