@@ -27,13 +27,15 @@ async function createServer () {
     }
   })
 
+  // TODO: Remove session state cookie and store in dynamo
   server.state('session', {
     path: '/',
     isSecure: config.cookie.isSecure,
     isHttpOnly: true,
     encoding: 'base64json',
     clearInvalid: true,
-    strictHeader: true
+    strictHeader: true,
+    ignoreErrors: true
   })
 
   // Register the plugins
